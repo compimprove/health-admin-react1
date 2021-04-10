@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import React from 'react';
 import 'antd/dist/antd.css';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -29,11 +29,11 @@ export default class AppSiderBar extends React.Component {
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="1" icon={<PieChartOutlined />}>
-            <Link href="/">Over view</Link>
+            <Link to="/">Over view</Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<DesktopOutlined />}>
-            Adjust Config
-            </Menu.Item>
+            <Link to="/login">Login</Link>
+          </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="User">
             <Menu.Item key="3">Tom</Menu.Item>
             <Menu.Item key="4">Bill</Menu.Item>

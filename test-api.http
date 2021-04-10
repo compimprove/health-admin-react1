@@ -1,0 +1,32 @@
+GET https://graduate-server-project.herokuapp.com/meal
+
+###
+GET https://graduate-server-project.herokuapp.com/training
+
+###
+POST https://graduate-server-project.herokuapp.com/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "admin",
+    "password": "admin"
+}
+
+###
+GET https://graduate-server-project.herokuapp.com/user
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwiaWQiOiI2MDUyMGQ3MmYyY2JjNmFlYmQ1YmM3NGUiLCJpYXQiOjE2MTU5OTI4NDIsImV4cCI6MTYxNTk5NjQ0Mn0.3e_501R-YnEcvynK6L7_QOTMKWAjJLgOn3IhGEB-gd0
+
+###
+POST http://localhost:3001/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "admin",
+    "password": "admin"
+}
+
+###
+GET http://localhost:3001/user
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwiaWQiOiI2MDZlY2RhZmMyZDYxMjFhY2Q0ZWU5YjciLCJpYXQiOjE2MTc5ODE0MTcsImV4cCI6MTYxNzk4NTAxN30.w3mD1EesIdxp_MO3LB61UMlCXzi4v64bAB0BwDlwkKM

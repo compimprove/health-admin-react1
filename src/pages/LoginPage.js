@@ -4,12 +4,13 @@ import { login } from '../redux/actions';
 import { Form, Input, Button, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
+import { useHistory } from 'react-router';
 const { Header, Footer, Sider, Content } = Layout;
 
 
 function LoginPage({ login }) {
   const onFinish = (values) => {
-    // values.router = router;
+    values.history = useHistory();
     login(values);
   };
 
