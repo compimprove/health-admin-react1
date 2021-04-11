@@ -26,11 +26,12 @@ class TrainingCreator extends React.Component {
 
 
 const TrainingCreatorForm = () => {
+  let [steps, setSteps] = useState();
+
   const onFinish = values => {
+    values.steps = steps;
     console.log('Received values of form:', values);
   };
-
-  let [steps, setSteps] = useState();
 
   let saveStep = function (params) {
     message.success("Đã lưu");
@@ -97,93 +98,6 @@ const TrainingCreatorForm = () => {
     </Form>
   );
 };
-
-const StepInput = function () {
-  let { type, setType } = useState("rest");
-  const onChangeType = (e) => {
-    setType({ type: e.target.value });
-  }
-  const onFinish = values => {
-    console.log('Received values StepInput:', values);
-  };
-  let typeOptions = [
-    { label: "Nghỉ giữa chừng", value: "rest" },
-    { label: "Tập", value: "active" },
-  ]
-
-  return (
-    <Form onFinish={onFinish} name="step-input" autoComplete="off" style={{ width: "600px", margin: "30px" }}>
-      <Form.List name="steps">
-        {(fields, { add, remove }) => (
-          <Space style={{ display: "flex" }} >
-            <div>
-              {fields.map(({ key, name, fieldKey, ...restField }) => (
-                <>
-                  <Form.Item
-                    {...restField}
-                    name={[name, 'types']}
-                    fieldKey={[fieldKey, 'types']}
-                    label="Loại"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Hãy chọn loại bài tập',
-                      },
-                    ]}>
-                    <Radio.Group
-                      value={type}
-                      onChange={onChangeType}
-                      optionType="button"
-                      buttonStyle="solid"
-                      options={typeOptions}>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, 'length']}
-                    fieldKey={[fieldKey, 'length']}
-                    rules={[{ required: true, message: 'Missing' }]}
-                    label="Thời lượng (phút)"
-                  >
-                    <InputNumber />
-                  </Form.Item>
-                  {type == "active" &&
-                    <>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'description']}
-                        fieldKey={[fieldKey, 'description']}
-                      >
-                        <Input placeholder="Mô tả" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'videoUrl']}
-                        fieldKey={[fieldKey, 'videoUrl']}
-                      >
-                        <Input placeholder="Video Link" />
-                      </Form.Item>
-                    </>}
-                  <MinusCircleOutlined onClick={() => remove(name)} />
-                </>
-              ))}
-              <Form.Item>
-                <Button type="dashed" onClick={() => add()} icon={<PlusOutlined />}>
-                  Thêm các bước tập
-            </Button>
-              </Form.Item>
-            </div>
-          </Space>
-        )}
-      </Form.List>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Lưu
-      </Button>
-      </Form.Item>
-    </Form>
-  );
-}
 
 
 

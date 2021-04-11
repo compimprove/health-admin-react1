@@ -157,7 +157,7 @@ const StepCreator = ({ setAllSteps }) => {
             <span style={{ marginLeft: 10 }}>Phút</span>
           </Row>
           <Divider orientation="left">Mô tả</Divider>
-          <Input.TextArea autoSize allowClear value={getCurrentDescription()} onChange={setCurrentDescription} />
+          <Input.TextArea autoSize={{ minRows: 3 }} allowClear value={getCurrentDescription()} onChange={setCurrentDescription} />
           <Divider orientation="left">Video hướng dẫn</Divider>
           <Upload
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
