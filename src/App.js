@@ -11,6 +11,10 @@ import {
 import Home from './pages/Home';
 import { connect } from 'react-redux';
 import TrainingCreator from './pages/TrainingCreator';
+import RouteDefine from './route_define';
+import appRoutes from './pages/routes';
+import MainLayout from './component/MainLayout';
+import "./App.css";
 
 function App({ isLogin }) {
   // if (!isLogin) {
@@ -19,14 +23,11 @@ function App({ isLogin }) {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" >
-          <Home />
-        </Route>
-        <Route path="/create-training" >
-          <TrainingCreator />
-        </Route>
         <Route path="/login" >
           <LoginPage />
+        </Route>
+        <Route>
+          <MainLayout>{appRoutes()}</MainLayout>
         </Route>
       </Switch>
     </BrowserRouter>

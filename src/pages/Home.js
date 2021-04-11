@@ -8,7 +8,8 @@ import {
 } from '@ant-design/icons';
 import React from 'react';
 import 'antd/dist/antd.css';
-import AppSiderBar from '../component/sider';
+import AppSiderBar from '../component/Sider';
+import RouteDefine from '../route_define';
 
 const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
@@ -17,7 +18,6 @@ export default class Home extends React.Component {
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        <AppSiderBar />
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} />
           <Content style={{ margin: '0 16px' }}>

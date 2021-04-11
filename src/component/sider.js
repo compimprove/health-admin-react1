@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
+import RouteDefine from '../route_define';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -22,17 +23,22 @@ export default class AppSiderBar extends React.Component {
     console.log(collapsed);
     this.setState({ collapsed });
   };
+
   render() {
     const { collapsed } = this.state;
+    const defaultRoute = this.props.defaultRoute || RouteDefine.Home;
     return (
       <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="1" icon={<PieChartOutlined />}>
-            <Link to="/">Over view</Link>
+        <Menu theme="dark" defaultSelectedKeys={[defaultRoute]} mode="inline">
+          <Menu.Item key={RouteDefine.Home} icon={<PieChartOutlined />}>
+            <Link to={RouteDefine.Home}>Over view</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<DesktopOutlined />}>
-            <Link to="/login">Login</Link>
+          <Menu.Item key={RouteDefine.LoginPage} icon={<DesktopOutlined />}>
+            <Link to={RouteDefine.LoginPage}>Login</Link>
+          </Menu.Item>
+          <Menu.Item key={RouteDefine.TrainingCreator} icon={<DesktopOutlined />}>
+            <Link to={RouteDefine.TrainingCreator}>Training Creator</Link>
           </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="User">
             <Menu.Item key="3">Tom</Menu.Item>
