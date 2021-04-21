@@ -1,19 +1,29 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import RouteDefine from '../route_define';
 import Home from './Home';
-import LoginPage from './LoginPage';
+import MealCreator from './MealCreator';
+import StreamExercise from './StreamExercise';
 import TrainingCreator from './TrainingCreator';
 
 export const routes = [
   {
-    path: RouteDefine.TrainingCreator,
+    path: TrainingCreator.routeName,
     component: TrainingCreator,
+    navigationName: ""
   },
   {
-    path: RouteDefine.Home,
+    path: MealCreator.routeName,
+    component: MealCreator
+  },
+  {
+    path: StreamExercise.routeName,
+    component: StreamExercise
+  },
+  {
+    path: Home.routeName,
     component: Home
-  }
+  },
+
 ];
 
 export default () => (
@@ -29,6 +39,6 @@ export default () => (
         />
       );
     })}
-    <Redirect to='/' />
+    <Redirect to='/not-found' />
   </Switch>
 );

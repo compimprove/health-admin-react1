@@ -1,16 +1,14 @@
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Provider, connect } from 'react-redux';
-import { login } from '../redux/actions';
 import { Form, Input, Button, Checkbox } from 'antd';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
-import { useHistory } from 'react-router';
+import React from 'react';
+import { UserContext } from '../context/UserContext';
 const { Header, Footer, Sider, Content } = Layout;
 
 
-function LoginPage({ login }) {
+function _LoginPage({ login }) {
   const onFinish = (values) => {
-    values.history = useHistory();
     login(values);
   };
 
@@ -84,7 +82,12 @@ function LoginPage({ login }) {
   );
 };
 
-export default connect(
-  null,
-  { login }
-)(LoginPage)
+const LoginPage = function () {
+  return <UserContext.Consumer>
+    {context => <_LoginPage login={context.login} />}
+  </UserContext.Consumer>
+}
+LoginPage.routeName = "/login";
+
+export default LoginPage;
+

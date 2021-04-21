@@ -1,20 +1,14 @@
 import { Layout, Menu, Breadcrumb } from 'antd';
-import {
-  DesktopOutlined,
-  PieChartOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
 import React from 'react';
 import 'antd/dist/antd.css';
-import AppSiderBar from '../component/Sider';
-import RouteDefine from '../route_define';
 
 const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 
 export default class Home extends React.Component {
+  static routeName =  "/";
+
+
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Breadcrumb, Form, Input, Button, Space, InputNumber, Select, Radio, Steps, Divider, message } from 'antd';
+import { Layout, Form, Input, Button, Space, InputNumber, message } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 import 'antd/dist/antd.css';
-import AppSiderBar from '../component/Sider';
-import RouteDefine from '../route_define';
 import { MinusCircleOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import StepCreator from '../component/StepCreator';
 import { LogUtils } from '../service/logUtils';
+import { UserContext } from '../context/UserContext';
 
 class TrainingCreator extends React.Component {
+  static routeName = "/training-creator"
+  static contextType = UserContext;
   state = {
 
   }
@@ -17,7 +18,7 @@ class TrainingCreator extends React.Component {
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0, color: "white" }}>Training Creator</Header>
+          <Header className="site-layout-background" style={{ color: "white" }}>Training Creator</Header>
           <TrainingCreatorForm />
         </Layout>
       </Layout>);
