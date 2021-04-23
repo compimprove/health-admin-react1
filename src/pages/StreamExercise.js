@@ -1,8 +1,8 @@
 import { io } from 'socket.io-client';
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+
 import { UserContext } from '../context/UserContext';
-import Url from '../service/url';
+import { Layout } from 'antd';
 const { Header } = Layout;
 
 const socketConfig = {
@@ -19,7 +19,7 @@ const socketConfig = {
 };
 
 class StreamExercise extends Component {
-  static routeName = "/stream-exercise";
+  static routeName = "/stream-exercise/in-room";
   static contextType = UserContext;
 
   state = {
@@ -36,15 +36,16 @@ class StreamExercise extends Component {
   }
 
   componentDidMount() {
-    this.context.state.axios({
-      method: "get",
-      url: Url.UserData
-    })
+    let url = new URL(window.location.href);
+    this.roomId = url.searchParams.get('roomId');
     this.socket.emit('userToken', this.context.state.token);
     this.socket.on("userToken", (status, message) => {
       if (status === 200) {
-
+        this.joinRoom(this.roomId);
       }
+    })
+    this.socket.on("me", (id) => {
+      console.log("My socket id", id);
     })
   }
 
@@ -55,9 +56,9 @@ class StreamExercise extends Component {
         this.video.current.srcObject = currentStream;
         this.socketJoining(roomId);
       });
-    this.socket.on("me", (id) => {
-      console.log("My socket id", id);
-    })
+    this.socket.on("receiveConnectFromOtherClients", this.receiveConnectFromOtherClients.bind(this));
+    this.socket.on("receiveSuccessConnect", this.receiveSuccessConnect.bind(this));
+    this.socket.on("leave", this.onLeave.bind(this));
   }
 
   socketJoining(roomId) {
@@ -68,8 +69,6 @@ class StreamExercise extends Component {
         otherSocketIds.forEach(socketId => this.socketConnectPeerToOtherClient(socketId));
       }
     });
-    this.socket.on("receiveConnectFromOtherClients", this.receiveConnectFromOtherClients.bind(this));
-    this.socket.on("receiveSuccessConnect", this.receiveSuccessConnect.bind(this));
   }
   // khi muon connect voi clien khac, tao peer, roi gui socketId client do + signal data cho server o cong "connectToOtherClients"
   socketConnectPeerToOtherClient(socketId) {
@@ -94,10 +93,10 @@ class StreamExercise extends Component {
       otherVideo.current.srcObject = event.streams[0];
     }
     this.setState({
-      ...this.state, otherVideo: [
+      ...this.state, otherVideo: {
         ...this.state.otherVideo,
-        otherVideo
-      ]
+        [socketId]: otherVideo
+      }
     })
     this.peerConnections[socketId] = peerConnection;
     this.socket.on("candidate", (id, candidate) => {
@@ -127,10 +126,10 @@ class StreamExercise extends Component {
       otherVideo.current.srcObject = event.streams[0];
     }
     this.setState({
-      ...this.state, otherVideo: [
+      ...this.state, otherVideo: {
         ...this.state.otherVideo,
-        otherVideo
-      ]
+        [socketId]: otherVideo
+      }
     })
     this.peerConnections[socketId] = peerConnection;
     this.socket.on("candidate", (id, candidate) => {
@@ -147,30 +146,46 @@ class StreamExercise extends Component {
     console.log("receiveSuccessConnect from", socketId, signalData);
   }
 
+  onLeave(socketId) {
+    console.log("someone leave", socketId);
+    if (this.peerConnections[socketId] != null) {
+      this.peerConnections[socketId].close();
+      let otherVideo = {
+        ...this.state.otherVideo,
+      }
+      delete otherVideo[socketId];
+      this.setState({ otherVideo: otherVideo });
+    }
+  }
+
   initSocket() {
 
   }
 
   componentWillUnmount() {
     this.socket.close();
-    this.state.currentStream.getTracks().forEach(function (track) {
-      track.stop();
-    });
+    this.peerConnections.forEach(peerConnection => peerConnection.close());
+    try {
+      if (this.state.currentStream != null)
+        this.state.currentStream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-
-
   render() {
+    let otherVideo = Object.values(this.state.otherVideo)
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ color: "white" }}>Tập luyện trực tiếp</Header>
-
           <div>
             <video playsInline ref={this.video} autoPlay style={{ width: "300px" }} />
           </div>
           <div>
-            {this.state.otherVideo.map(value =>
+            {otherVideo.map(value =>
               <video playsInline ref={value} autoPlay style={{ width: "300px" }} />)}
           </div>
         </Layout>

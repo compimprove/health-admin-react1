@@ -3,6 +3,7 @@ const Url = {
   Websocket: host + "/websocket",
   Login: host + "/auth/login",
   UserData: host + "/user",
-  Rooms: host + "/rooms"
+  Room: host + "/room",
+  TrainerRoom: host + "/room/trainer"
 };
 export default Url;

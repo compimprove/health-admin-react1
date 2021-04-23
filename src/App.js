@@ -10,15 +10,14 @@ import "./App.css";
 import { UserContext } from './context/UserContext';
 
 export default function App() {
-  const { token } = React.useContext(UserContext).state;
-  console.log("reload App");
+  const { isLogin } = React.useContext(UserContext);
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/login" >
           <LoginPage />
         </Route>
-        {token != null && < Route >
+        {isLogin() && < Route >
           <MainLayout>{appRoutes()}</MainLayout>
         </Route>}
       </Switch>

@@ -8,8 +8,8 @@ POST https://graduate-server-project.herokuapp.com/auth/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "admin",
-    "password": "admin"
+    "email": "user2",
+    "password": "user2"
 }
 
 ###
@@ -27,6 +27,19 @@ content-type: application/json
 }
 
 ###
+GET http://localhost:3010/room/trainer
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRyYWluZXIxIiwiaWQiOiI2MDdmZjg2MTIzY2NlNjMwOTZmYThkYTAiLCJpYXQiOjE2MTkxNDIyOTIsImV4cCI6MTYxOTE0NTg5Mn0.Kkr4cUffpaEHaCRmia5NieYy_8xq9Oy5bxzY-qUrpqU
+
+{
+    "name": "room1"
+}
+
+###
 GET http://localhost:3010/room
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxIiwiaWQiOiI2MDdmZjg2MTIzY2NlNjMwOTZmYThkYTEiLCJpYXQiOjE2MTg5OTk0MDEsImV4cCI6MTYxOTAwMzAwMX0.InufP36HnaW3ZjbQPZI_Svy0xZNG1K8hzLC7HNsaMaU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxIiwiaWQiOiI2MDdmZjg2MTIzY2NlNjMwOTZmYThkYTEiLCJpYXQiOjE2MTkxNDI2NTEsImV4cCI6MTYxOTE0NjI1MX0.e5L8IBgbDXSOcon2I1QcnK0nXmaR5FomUF4uBBpCVrw
+
+{
+    
+}

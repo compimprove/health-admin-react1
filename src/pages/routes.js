@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from './Home';
 import MealCreator from './MealCreator';
+import Rooms from './Rooms';
 import StreamExercise from './StreamExercise';
 import TrainingCreator from './TrainingCreator';
 
@@ -9,7 +10,6 @@ export const routes = [
   {
     path: TrainingCreator.routeName,
     component: TrainingCreator,
-    navigationName: ""
   },
   {
     path: MealCreator.routeName,
@@ -18,6 +18,10 @@ export const routes = [
   {
     path: StreamExercise.routeName,
     component: StreamExercise
+  },
+  {
+    path: Rooms.routeName,
+    component: Rooms
   },
   {
     path: Home.routeName,

@@ -1,29 +1,25 @@
 import axios from "axios";
 import React from "react";
+import UserData from "../models/User";
 import Home from "../pages/Home";
 import LoginPage from "../pages/LoginPage";
 import Url from "../service/url";
-
-const buildAuthorizationHeader = function (token) {
-  return {
-    "Authorization": 'Bearer ' + token
-  };
-}
 
 export const UserContext = React.createContext();
 
 export class UserProvider extends React.Component {
   state = {
     token: null,
-    axios: axios.create(),
     userData: ""
   };
+  axios = axios.create();
 
   constructor(props) {
     super(props);
     let token = localStorage.getItem("token");
     console.log("token", token);
     if (token != null) {
+      this.axios.defaults.headers["Authorization"] = "Bearer " + token;
       this.initUserData(token);
     } else {
       this._goLogin();
@@ -35,11 +31,8 @@ export class UserProvider extends React.Component {
   async initUserData(token) {
     let response;
     try {
-      response = await this.state.axios({
+      response = await this.axios({
         method: "get",
-        headers: {
-          ...buildAuthorizationHeader(token)
-        },
         url: Url.UserData
       })
     } catch (error) {
@@ -49,7 +42,7 @@ export class UserProvider extends React.Component {
       console.log(response.data);
       this.setState({
         token,
-        userData: response.data
+        userData: new UserData(response.data)
       })
     }
     else {
@@ -67,7 +60,7 @@ export class UserProvider extends React.Component {
   }
 
   async login({ email, password }) {
-    let response = await this.state.axios({
+    let response = await this.axios({
       method: "post",
       url: Url.Login,
       data: {
@@ -82,30 +75,31 @@ export class UserProvider extends React.Component {
       let token = response.data.token;
       localStorage.setItem("token", token)
       console.log("login success: ", Url.Login, "values: ", { email, password }, "response", response.data);
-      this.state.axios.defaults.headers["Authorization"] = 'Bearer ' + token;
-      let res = await this.state.axios({
+      this.axios.defaults.headers["Authorization"] = 'Bearer ' + token;
+      let res = await this.axios({
         method: "get",
         url: Url.UserData
       })
       if (res.status == 200) {
         this.setState({
           token,
-          userData: res.data
+          userData: new UserData(res.data)
         })
       }
       window.location.pathname = Home.routeName
     }
   }
 
-  isLogin() {
+  isLogin = () => {
     return this.state.token != null;
   }
 
   render() {
-    let { state, login } = this;
+    let { state, login, isLogin } = this;
     let userData = this.state.userData;
+    let axios = this.axios;
     return (
-      <UserContext.Provider value={{ state, login, userData }}>
+      <UserContext.Provider value={{ axios, state, login, isLogin, userData }}>
         {this.props.children}
       </UserContext.Provider>
     );

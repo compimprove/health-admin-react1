@@ -14,6 +14,7 @@ import TrainingCreator from '../pages/TrainingCreator';
 import MealCreator from '../pages/MealCreator';
 import Home from '../pages/Home';
 import StreamExercise from '../pages/StreamExercise';
+import Rooms from '../pages/Rooms';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -48,8 +49,8 @@ export default class AppSiderBar extends React.Component {
           <Menu.Item key={MealCreator.routeName} icon={<DesktopOutlined />}>
             <Link to={MealCreator.routeName}>Meal Creator</Link>
           </Menu.Item>
-          <Menu.Item key={StreamExercise.routeName} icon={<DesktopOutlined />}>
-            <Link to={StreamExercise.routeName}>Stream Exercise</Link>
+          <Menu.Item key={Rooms.routeName} icon={<DesktopOutlined />}>
+            <Link to={Rooms.routeName}>Phòng tập trực tuyến</Link>
           </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="User">
             <Menu.Item key="3">Tom</Menu.Item>
