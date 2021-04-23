@@ -42,7 +42,7 @@ class MealForm extends Component {
         <Form
           style={{ width: 700, marginTop: 30 }}
           {...layout}
-          name="basic"
+          // name="basic"
           onFinish={this.onFinish}
           onFinishFailed={this.onFinishFailed}
         >

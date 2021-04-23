@@ -25,7 +25,6 @@ export class UserProvider extends React.Component {
       this._goLogin();
     }
     this.login = this.login.bind(this);
-    this.isLogin = this.isLogin.bind(this);
   }
 
   async initUserData(token) {

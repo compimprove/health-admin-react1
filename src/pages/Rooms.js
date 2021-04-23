@@ -73,9 +73,9 @@ class Rooms extends Component {
             {isTrainer && <CreateRoom createRoom={this.createRoom} />}
             {this.state.rooms && this.state.rooms.map(room => {
               if (isTrainer) {
-                return <RoomCell room={room} deleteRoom={this.deleteRoom} />
+                return <RoomCell key={room._id} room={room} deleteRoom={this.deleteRoom} />
               } else {
-                return <RoomCell room={room} />
+                return <RoomCell key={room._id} room={room} />
               }
             })}
           </Row>
