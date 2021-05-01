@@ -3,11 +3,14 @@ import LoginPage from './pages/LoginPage';
 import {
   BrowserRouter,
   Switch,
-  Route} from "react-router-dom";
+  Route
+} from "react-router-dom";
 import appRoutes from './pages/routes';
-import MainLayout from './component/MainLayout';
 import "./App.css";
 import { UserContext } from './context/UserContext';
+import { Layout } from 'antd';
+const { Content } = Layout;
+import AppSiderBar from './component/Sider';
 
 export default function App() {
   const { isLogin } = React.useContext(UserContext);
@@ -18,7 +21,12 @@ export default function App() {
           <LoginPage />
         </Route>
         {isLogin() && < Route >
-          <MainLayout>{appRoutes()}</MainLayout>
+          <Layout>
+            <AppSiderBar />
+            <Layout className="site-layout">
+              <Content>{appRoutes()}</Content>
+            </Layout>
+          </Layout>
         </Route>}
       </Switch>
     </BrowserRouter >

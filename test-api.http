@@ -22,24 +22,21 @@ POST http://localhost:3010/auth/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "user1",
-    "password": "user1"
+    "email": "congnv@gmail.com",
+    "password": "congnv"
 }
 
 ###
 GET http://localhost:3010/room/trainer
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRyYWluZXIxIiwiaWQiOiI2MDdmZjg2MTIzY2NlNjMwOTZmYThkYTAiLCJpYXQiOjE2MTkxNDIyOTIsImV4cCI6MTYxOTE0NTg5Mn0.Kkr4cUffpaEHaCRmia5NieYy_8xq9Oy5bxzY-qUrpqU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbmdudkBnbWFpbC5jb20iLCJpZCI6IjYwODZkMjQ0NDk0MDIxMGYwZTM0MzI3MiIsImlhdCI6MTYxOTQ0ODQxOCwiZXhwIjoxNjE5NDUyMDE4fQ.YVMojbtjaLCwPMjvuzEg6or6Mh_XMe3fbTq2y2WK-R4
 
 {
     "name": "room1"
 }
 
 ###
-GET http://localhost:3010/room
+GET http://localhost:3010/trainer/meal
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxIiwiaWQiOiI2MDdmZjg2MTIzY2NlNjMwOTZmYThkYTEiLCJpYXQiOjE2MTkxNDI2NTEsImV4cCI6MTYxOTE0NjI1MX0.e5L8IBgbDXSOcon2I1QcnK0nXmaR5FomUF4uBBpCVrw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbmdudkBnbWFpbC5jb20iLCJpZCI6IjYwODZkMjQ0NDk0MDIxMGYwZTM0MzI3MiIsImlhdCI6MTYxOTQ0ODQxOCwiZXhwIjoxNjE5NDUyMDE4fQ.YVMojbtjaLCwPMjvuzEg6or6Mh_XMe3fbTq2y2WK-R4
 
-{
-    
-}

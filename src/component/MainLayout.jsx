@@ -1,25 +1,17 @@
-import React, { useState } from "react";
-import { Layout } from "antd";
-import AppSiderBar from "./Sider";
-
+import React, { Component } from 'react';
+import { Layout } from 'antd';
+const { Header } = Layout;
 const { Content } = Layout;
 
-const MainLayout = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
 
-  const toggle = () => {
-    setCollapsed(!collapsed);
-  };
-
+const MainLayout = function ({ children, title }) {
   return (
-    <Layout>
-      <AppSiderBar />
+    <Layout style={{ minHeight: '100vh' }}>
       <Layout className="site-layout">
-        {/* <Header collapsed={collapsed} toggle={toggle} /> */}
+        <Header className="site-layout-background" style={{ color: "white" }}>{title}</Header>
         <Content>{children}</Content>
       </Layout>
-    </Layout>
-  );
-};
+    </Layout>);
+}
 
 export default MainLayout;

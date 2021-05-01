@@ -1,9 +1,15 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import React from "react";
 import UserData from "../models/User";
 import Home from "../pages/Home";
 import LoginPage from "../pages/LoginPage";
 import Url from "../service/url";
+import {
+  StatusCodes,
+} from 'http-status-codes';
+
+const tokenLength = 60 * 1000; // milliseconds
+
 
 export const UserContext = React.createContext();
 
@@ -12,6 +18,7 @@ export class UserProvider extends React.Component {
     token: null,
     userData: ""
   };
+  timerRefreshToken = null;
   axios = axios.create();
 
   constructor(props) {
@@ -83,20 +90,66 @@ export class UserProvider extends React.Component {
         this.setState({
           token,
           userData: new UserData(res.data)
-        })
+        });
+        if (this.timerRefreshToken != null) {
+          this.timerRefreshToken.cancel();
+        }
+        this.timerRefreshToken = setTimeout(() => {
+          this.refreshToken();
+        }, tokenLength - 15 * 1000)
       }
       window.location.pathname = Home.routeName
     }
   }
 
+  refreshToken() {
+    console.log("refresh token");
+    let response = this.axiosCall({
+      method: "post",
+      url: Url.RefreshToken
+    });
+    this.setState({
+      token: response.data.token
+    })
+  }
+
   isLogin = () => {
     return this.state.token != null;
+  }
+  /**
+   * @param {AxiosRequestConfig} config
+   */
+  axiosCall = async (config) => {
+    try {
+      let response = await this.axios(config);
+      switch (response.status) {
+        case StatusCodes.OK:
+          return response;
+        case StatusCodes.UNAUTHORIZED:
+          this._goLogin();
+          return;
+        default:
+          console.error("Error response", response.status);
+          return response;
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        status: StatusCodes.INTERNAL_SERVER_ERROR
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.timerRefreshToken != null) {
+      this.timerRefreshToken.cancel();
+    }
   }
 
   render() {
     let { state, login, isLogin } = this;
     let userData = this.state.userData;
-    let axios = this.axios;
+    let axios = this.axiosCall;
     return (
       <UserContext.Provider value={{ axios, state, login, isLogin, userData }}>
         {this.props.children}

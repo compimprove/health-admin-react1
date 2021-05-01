@@ -1,20 +1,15 @@
 import { Layout, Menu } from 'antd';
 import {
   DesktopOutlined,
-  PieChartOutlined,
-  FileOutlined,
-  TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import TrainingCreator from '../pages/TrainingCreator';
-import MealCreator from '../pages/MealCreator';
-import Home from '../pages/Home';
-import StreamExercise from '../pages/StreamExercise';
 import Rooms from '../pages/Rooms';
+import MealOverview from '../pages/MealOverview';
+import TrainingOverview from '../pages/TrainingOverview';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -38,32 +33,33 @@ export default class AppSiderBar extends React.Component {
 
     return (
       <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-        <div className="logo" />
+        <div style={{ height: "60px" }}>
+
+        </div>
         <Menu theme="dark" defaultSelectedKeys={[this.defaultSelectedRoute]} mode="inline">
-          <Menu.Item key={Home.routeName} icon={<PieChartOutlined />}>
+
+          {/* <Menu.Item key={Home.routeName} icon={<PieChartOutlined />}>
             <Link to={Home.routeName}>Over view</Link>
+          </Menu.Item> */}
+          <Menu.Item key={TrainingOverview.routeName} icon={<DesktopOutlined />}>
+            <Link to={TrainingOverview.routeName}>Quản lý các bài tập</Link>
           </Menu.Item>
-          <Menu.Item key={TrainingCreator.routeName} icon={<DesktopOutlined />}>
-            <Link to={TrainingCreator.routeName}>Training Creator</Link>
-          </Menu.Item>
-          <Menu.Item key={MealCreator.routeName} icon={<DesktopOutlined />}>
-            <Link to={MealCreator.routeName}>Meal Creator</Link>
+          <Menu.Item key={MealOverview.routeName} icon={<DesktopOutlined />}>
+            <Link to={MealOverview.routeName}>Quản lý dinh dưỡng</Link>
           </Menu.Item>
           <Menu.Item key={Rooms.routeName} icon={<DesktopOutlined />}>
             <Link to={Rooms.routeName}>Phòng tập trực tuyến</Link>
           </Menu.Item>
-          <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-            <Menu.Item key="3">Tom</Menu.Item>
-            <Menu.Item key="4">Bill</Menu.Item>
-            <Menu.Item key="5">Alex</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
+          <Menu.Item key="sub1" icon={<UserOutlined />} >
+            <Link to={Rooms.routeName}>Quản lý User</Link>
+          </Menu.Item>
+          {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
             <Menu.Item key="6">Team 1</Menu.Item>
             <Menu.Item key="8">Team 2</Menu.Item>
           </SubMenu>
           <Menu.Item key="9" icon={<FileOutlined />}>
             Files
-            </Menu.Item>
+            </Menu.Item> */}
         </Menu>
       </Sider>
     );

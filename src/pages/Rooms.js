@@ -5,6 +5,7 @@ import { Button, Card, Col, Form, Input, Layout, Row, Typography } from 'antd';
 import UserData from '../models/User';
 import StreamExercise from './StreamExercise';
 import { Link } from 'react-router-dom';
+import localized from '../service/localized';
 const { Header } = Layout;
 const { Title } = Typography;
 
@@ -31,34 +32,28 @@ class Rooms extends Component {
       method: 'get',
       url: url
     })
-    if (res.status == 200) {
-      this.setState({ rooms: res.data });
-      console.log("Rooms", "list room", this.state.rooms);
-    }
+    this.setState({ rooms: res.data });
+    console.log("Rooms", "list room", this.state.rooms);
   }
 
   createRoom = async ({ name, description }) => {
     console.log("createRoom", name, description);
     let res = await this.context.axios({
       method: 'post',
-      url: Url.Room,
+      url: Url.TrainerRoom,
       data: { name, description }
     })
-    if (res.status == 200) {
-      await this.getRooms();
-    }
+    await this.getRooms();
   }
 
   deleteRoom = async (roomId) => {
     console.log("deleteRoom", roomId);
     let res = await this.context.axios({
       method: 'delete',
-      url: Url.Room,
+      url: Url.TrainerRoom,
       data: { roomId }
     })
-    if (res.status == 200) {
-      await this.getRooms();
-    }
+    await this.getRooms();
   }
 
   render() {
@@ -67,7 +62,7 @@ class Rooms extends Component {
       <Layout style={{ minHeight: '100vh' }}>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ color: "white" }}>Phòng tập
-            <Button onClick={this.getRooms}>Refresh</Button>
+            <Button onClick={this.getRooms}>{localized.get("refresh")}</Button>
           </Header>
           <Row gutter={[24, 24]} style={{ marginLeft: 10, marginRight: 10, paddingTop: 20 }}>
             {isTrainer && <CreateRoom createRoom={this.createRoom} />}
@@ -98,22 +93,22 @@ const CreateRoom = function ({ createRoom }) {
         onFinish={createRoom}
       >
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "space-between" }}>
-          <Title level={4}>Create Room</Title>
+          <Title level={4}>{localized.get("createRoom")}</Title>
           <Form.Item  >
             <Button type="primary" htmlType="submit">
-              Create
+            {localized.get("create")}
         </Button>
           </Form.Item>
         </div>
         <Form.Item
-          label="Name"
+          label={localized.get("name")}
           name="name"
           rules={[{ required: true, message: 'Please input the name' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Description"
+          label={localized.get("description")}
           name="description"
         >
           <Input.TextArea />

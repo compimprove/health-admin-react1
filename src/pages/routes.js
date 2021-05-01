@@ -2,18 +2,33 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from './Home';
 import MealCreator from './MealCreator';
+import MealOverview from './MealOverview';
+import MealProgram from './MealProgram';
 import Rooms from './Rooms';
 import StreamExercise from './StreamExercise';
-import TrainingCreator from './TrainingCreator';
+import ExerciseCreator from './ExerciseCreator';
+import TrainingOverview from './TrainingOverview';
 
 export const routes = [
   {
-    path: TrainingCreator.routeName,
-    component: TrainingCreator,
+    path: ExerciseCreator.routeName,
+    component: ExerciseCreator,
+  },
+  {
+    path: TrainingOverview.routeName,
+    component: TrainingOverview,
   },
   {
     path: MealCreator.routeName,
     component: MealCreator
+  },
+  {
+    path: MealOverview.routeName,
+    component: MealOverview
+  },
+  {
+    path: MealProgram.routeName,
+    component: MealProgram
   },
   {
     path: StreamExercise.routeName,

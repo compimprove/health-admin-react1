@@ -3,26 +3,18 @@ import React, { useState } from 'react';
 import ExerciseStep from "../models/ExerciseStep";
 import { LogUtils } from "../service/logUtils";
 import { UploadOutlined } from '@ant-design/icons';
+import { ExerciseType } from "../models/EnumDefine";
 
 const { Step } = Steps;
-const ExerciseType = {
-  Rest: "rest",
-  Warmup: "warmup",
-  Cooldown: "cooldown",
-  Active: "active"
-}
 
-const StepCreator = ({ setAllSteps }) => {
+const StepCreator = ({ setAllSteps, steps }) => {
   let [currentStep, setCurrent] = React.useState(0);
-  let [steps, _setSteps] = useState([new ExerciseStep({ length: 10, type: ExerciseType.Warmup })]);
   let [uploadType, setUploadType] = React.useState(true);
-  const setSteps = function (newStep) {
-    _setSteps(newStep);
-    setAllSteps(newStep);
-  }
+  const setSteps = setAllSteps
+
   const addEmptyStep = () => {
     let newStep = [...steps,
-    new ExerciseStep({ length: 5, type: ExerciseType.Active })
+    new ExerciseStep({ length: 5, exerciseType: ExerciseType.Active, title: "Đi bộ" })
     ];
     setSteps(newStep);
     setCurrent(newStep.length - 1);
@@ -37,12 +29,21 @@ const StepCreator = ({ setAllSteps }) => {
     return result;
   }
 
+  const getCurrentTitle = () => {
+    let result = "";
+    if (steps[currentStep]) {
+      result = steps[currentStep].title;
+    }
+    LogUtils.log("getCurrentTitle", result);
+    return result;
+  }
+
   const setCurrentType = (e) => {
     let value = e.target.value;
     let newSteps = [...steps];
     if (newSteps[currentStep] != null) {
       LogUtils.log("setCurrentType", value);
-      newSteps[currentStep].type = value;
+      newSteps[currentStep].exerciseType = value;
       setSteps(newSteps);
     } else {
       message.error("Chọn bước muốn chỉnh sửa");
@@ -62,6 +63,19 @@ const StepCreator = ({ setAllSteps }) => {
     }
   }
 
+  const setCurrentTitle = (e) => {
+    let value = e.target.value
+    let newSteps = [...steps];
+    if (newSteps[currentStep] != null) {
+      LogUtils.log("setCurrentTitle", value);
+      newSteps[currentStep].title = value
+      setSteps(newSteps);
+    } else {
+      message.error("Chọn bước muốn chỉnh sửa");
+      LogUtils.error("setCurrentTitle", value);
+    }
+  }
+
   const setCurrentDescription = (e) => {
     let value = e.target.value;
     LogUtils.log("setCurrentLength", value);
@@ -78,7 +92,7 @@ const StepCreator = ({ setAllSteps }) => {
   const getCurrentType = () => {
     let result = 0;
     if (steps[currentStep]) {
-      result = steps[currentStep].type;
+      result = steps[currentStep].exerciseType;
     }
     LogUtils.log("getCurrentType", result)
     return result;
@@ -126,7 +140,7 @@ const StepCreator = ({ setAllSteps }) => {
     { label: 'Nghỉ', value: 'rest' },
     { label: 'Tập luyện', value: 'active' },
     { label: 'Khởi động', value: 'warmup' },
-    { label: 'Cooldown', value: 'cooldown' }
+    { label: 'Giãn cơ', value: 'cooldown' }
   ];
 
   const findTypeTitle = function (type) {
@@ -134,13 +148,16 @@ const StepCreator = ({ setAllSteps }) => {
     if (result != null) return result.label;
     return "Loại không rõ";
   }
-
+  let minutes = steps == null ? 0 : steps.reduce((previous, current) => (previous + current.length), 0);
+  console.log(minutes);
   return (
     <>
+      <div>Thời lượng <span>{minutes} phút</span></div>
+      <div><span>Các bước: </span></div>
       <div style={{ display: "flex", flexDirection: "row", marginTop: 20 }}>
         <Steps className="steps-title" current={currentStep} onChange={onChange} direction="vertical">
           {steps.length > 0 && steps.map((item, index) => (
-            <Step key={index} title={findTypeTitle(item.type) + " " + item.length + " phút"} />
+            <Step key={index} title={findTypeTitle(item.exerciseType) + ": " + steps[index].title + " " + item.length + " phút"} />
           ))}
         </Steps>
         <div className="steps-content">
@@ -151,6 +168,10 @@ const StepCreator = ({ setAllSteps }) => {
             optionType="button"
             buttonStyle="solid"
           />
+          <Divider orientation="left">Tiêu đề</Divider>
+          <Row align="middle">
+            <Input value={getCurrentTitle()} onChange={setCurrentTitle} />
+          </Row>
           <Divider orientation="left">Thời lượng</Divider>
           <Row align="middle">
             <InputNumber value={getCurrentLength()} onChange={setCurrentLength} />
@@ -203,7 +224,7 @@ const StepForm = function ({ index, initialStep = {}, setStep }) {
     console.log('Failed:', errorInfo);
   };
 
-  let [type, setType] = useState(initialStep.type);
+  let [type, setType] = useState(initialStep.exerciseType);
   let [length, setLength] = useState(initialStep.length);
 
   return (

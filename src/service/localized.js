@@ -23,7 +23,14 @@ const localized = {
     sideDish: "Bữa ăn phụ",
     ingredient: "Thành phần",
     ingredientName: "Tên",
-    amount: "Số lượng"
+    amount: "Số lượng",
+    nutritionIngredient: "Thành phần dinh dưỡng",
+    createRoom: "Tạo phòng",
+    name: "Tên",
+    create: "Tạo",
+    refresh: "Tải lại",
+    direction: "Cách chế biến",
+    mealImage: "Ảnh"
   }
 }
 

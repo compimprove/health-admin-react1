@@ -1,7 +1,8 @@
 export default class ExerciseStep {
-  constructor({ length, type, description, videoUrl }) {
+  constructor({ length, exerciseType, description, videoUrl, title }) {
     this.length = length || 0;
-    this.type = type || "";
+    this.title = title || "";
+    this.exerciseType = exerciseType || "";
     this.description = description || "";
     this.videoUrl = videoUrl || "";
   }
