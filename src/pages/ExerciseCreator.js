@@ -72,7 +72,13 @@ class ExerciseCreator extends React.Component {
       steps: response.data.steps
     });
     console.log("get exercise", response.data);
+    message.success("Tạo bài tập thành công");
     this.formRef.current.setFieldsValue(response.data);
+  }
+
+  clearTrainingState = () => {
+    this.id = null
+    message.info("Đã thay đổi")
   }
 
   editExercise = async (form, id) => {
@@ -86,6 +92,7 @@ class ExerciseCreator extends React.Component {
       steps: response.data.steps
     });
     console.log("get exercise", response.data);
+    message.success("Sửa bài tập thành công");
     this.formRef.current.setFieldsValue(response.data);
   }
 
@@ -98,6 +105,7 @@ class ExerciseCreator extends React.Component {
   render() {
     return (
       <MainLayout title="Tạo bài tập">
+        <a onClick={this.clearTrainingState}>Tạo bài tập mới từ bài này</a>
         <Form
           ref={this.formRef}
           name="training-creator"

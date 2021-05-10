@@ -4,6 +4,7 @@ import ExerciseStep from "../models/ExerciseStep";
 import { LogUtils } from "../service/logUtils";
 import { UploadOutlined } from '@ant-design/icons';
 import { ExerciseType } from "../models/EnumDefine";
+import Utils from "../service/utils";
 
 const { Step } = Steps;
 
@@ -148,16 +149,17 @@ const StepCreator = ({ setAllSteps, steps }) => {
     if (result != null) return result.label;
     return "Loại không rõ";
   }
-  let minutes = steps == null ? 0 : steps.reduce((previous, current) => (previous + current.length), 0);
-  console.log(minutes);
+  let exerciseTimeString = steps == null ? 0
+    : Utils.timeToString(steps.reduce((previous, current) => (previous + current.length), 0));
+  console.log(exerciseTimeString);
   return (
     <>
-      <div>Thời lượng <span>{minutes} phút</span></div>
+      <div>Thời lượng <span>{exerciseTimeString}</span></div>
       <div><span>Các bước: </span></div>
       <div style={{ display: "flex", flexDirection: "row", marginTop: 20 }}>
         <Steps className="steps-title" current={currentStep} onChange={onChange} direction="vertical">
           {steps.length > 0 && steps.map((item, index) => (
-            <Step key={index} title={findTypeTitle(item.exerciseType) + ": " + steps[index].title + " " + item.length + " phút"} />
+            <Step key={index} title={findTypeTitle(item.exerciseType) + ": " + steps[index].title + " " + Utils.timeToString(item.length)} />
           ))}
         </Steps>
         <div className="steps-content">
@@ -175,7 +177,7 @@ const StepCreator = ({ setAllSteps, steps }) => {
           <Divider orientation="left">Thời lượng</Divider>
           <Row align="middle">
             <InputNumber value={getCurrentLength()} onChange={setCurrentLength} />
-            <span style={{ marginLeft: 10 }}>Phút</span>
+            <span style={{ marginLeft: 10 }}>Giây</span>
           </Row>
           <Divider orientation="left">Mô tả</Divider>
           <Input.TextArea autoSize={{ minRows: 3 }} allowClear value={getCurrentDescription()} onChange={setCurrentDescription} />

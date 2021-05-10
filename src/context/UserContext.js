@@ -124,6 +124,8 @@ export class UserProvider extends React.Component {
       let response = await this.axios(config);
       switch (response.status) {
         case StatusCodes.OK:
+          console.log("axios: ", config.url)
+          console.log("receiveData", response.data);
           return response;
         case StatusCodes.UNAUTHORIZED:
           this._goLogin();
@@ -134,6 +136,7 @@ export class UserProvider extends React.Component {
       }
     } catch (error) {
       console.error(error);
+      this._goLogin();
       return {
         status: StatusCodes.INTERNAL_SERVER_ERROR
       }

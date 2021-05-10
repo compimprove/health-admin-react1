@@ -61,11 +61,23 @@ class MealOverview extends Component {
     await this.getMealProgramData();
   }
 
+  onChangeTab = (key) => {
+    const url = new URL(window.location);
+    url.searchParams.set('key', key);
+    window.history.pushState({}, '', url);
+  }
+
   render() {
+    const url = new URL(window.location);
+    const activeKey = url.searchParams.get('key') || 1;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Layout className="site-layout">
-          <Tabs defaultActiveKey="1" size="large" tabBarStyle={{ backgroundColor: "#00111e", color: "white", height: "65px" }}>
+          <Tabs
+            defaultActiveKey={activeKey}
+            onChange={this.onChangeTab}
+            size="large"
+            tabBarStyle={{ backgroundColor: "#00111e", color: "white", height: "65px" }}>
             <TabPane tab="Quản lý chương trình dinh dưỡng" key="1">
               <Row gutter={[10, 10]} style={{ marginLeft: 10, marginRight: 10 }}>
                 <Col span={4} offset={20}>

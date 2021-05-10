@@ -8,6 +8,7 @@ import Rooms from './Rooms';
 import StreamExercise from './StreamExercise';
 import ExerciseCreator from './ExerciseCreator';
 import TrainingOverview from './TrainingOverview';
+import TrainingProgramCreator from './TrainingProgramCreator';
 
 export const routes = [
   {
@@ -17,6 +18,10 @@ export const routes = [
   {
     path: TrainingOverview.routeName,
     component: TrainingOverview,
+  },
+  {
+    path: TrainingProgramCreator.routeName,
+    component: TrainingProgramCreator,
   },
   {
     path: MealCreator.routeName,

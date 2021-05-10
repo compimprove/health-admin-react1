@@ -1,7 +1,9 @@
 import { io } from 'socket.io-client';
 import React, { Component } from 'react';
+
 import { UserContext } from '../context/UserContext';
-import { Button, Col, Layout, Row } from 'antd';
+import { Layout } from 'antd';
+import Url from '../service/url';
 const { Header } = Layout;
 
 const socketConfig = {
@@ -17,59 +19,21 @@ const socketConfig = {
   ]
 };
 
-class Chat extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-
-  render() {
-    if (this.props.openChat) {
-      return <Col span={6} style={{ borderLeft: '1px solid' }} >
-        <Header className="site-layout-background" style={{ color: "white" }}>
-          <Button onClick={this.props.toggleOpenChat}>Close</Button>
-        </Header>
-
-      </Col>;
-    } else {
-      return (
-        <Button onClick={this.props.toggleOpenChat} style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "30px",
-        }}>Chat</Button>
-      );
-    }
-
-  }
-}
-
 class StreamExercise extends Component {
   static routeName = "/stream-exercise/in-room";
   static contextType = UserContext;
 
+  state = {
+    rooms: [],
+    currentStream: null,
+    otherClients: []
+  }
 
   constructor(props) {
     super(props);
     this.video = React.createRef();
     this.peerConnections = [];
     this.socket = io(process.env.REACT_APP_HOST);
-    this.state = {
-      openChat: false,
-      rooms: [],
-      currentStream: null,
-      otherVideo: {
-        1: React.createRef(),
-        2: React.createRef(),
-        3: React.createRef(),
-        4: React.createRef(),
-        5: React.createRef()
-      }
-    }
-  }
-
-  toggleOpenChat = () => {
-    this.setState({ openChat: !this.state.openChat });
   }
 
   componentDidMount() {
@@ -96,19 +60,14 @@ class StreamExercise extends Component {
     this.socket.on("receiveConnectFromOtherClients", this.receiveConnectFromOtherClients.bind(this));
     this.socket.on("receiveSuccessConnect", this.receiveSuccessConnect.bind(this));
     this.socket.on("leave", this.onLeave.bind(this));
-    this.socket.on("candidate", (id, candidate) => {
-      this.peerConnections[id]
-        .addIceCandidate(new RTCIceCandidate(candidate))
-        .catch(e => console.error(e));
-    });
   }
 
   socketJoining(roomId) {
     this.socket.emit("joining", roomId);
-    this.socket.on("joining", (otherSocketIds) => {
-      console.log("joining", otherSocketIds);
-      if (Array.isArray(otherSocketIds)) {
-        otherSocketIds.forEach(socketId => this.socketConnectPeerToOtherClient(socketId));
+    this.socket.on("joining", (otherClients) => {
+      console.log("joining", otherClients);
+      if (Array.isArray(otherClients)) {
+        otherClients.forEach(client => this.socketConnectPeerToOtherClient(client.socketId));
       }
     });
   }
@@ -130,21 +89,43 @@ class StreamExercise extends Component {
         this.socket.emit("candidate", socketId, event.candidate);
       }
     };
-    let otherVideo = React.createRef();
+    let videoSrc = React.createRef();
     peerConnection.ontrack = event => {
-      otherVideo.current.srcObject = event.streams[0];
+      videoSrc.current.srcObject = event.streams[0];
     }
+    this.context.axios({
+      method: "GET",
+      url: Url.UserInfoBySocketId + "/" + socketId,
+    }).then(function (response) {
+      this.setState({
+        ...this.state, otherClients: {
+          ...this.state.otherClients,
+          [socketId]: {
+            ...this.state.otherClients[socketId],
+            ...response.data
+          }
+        }
+      })
+    }.bind(this));
+
     this.setState({
-      otherVideo: {
-        ...this.state.otherVideo,
-        [socketId]: otherVideo
+      ...this.state, otherClients: {
+        ...this.state.otherClients,
+        [socketId]: {
+          ...this.state.otherClients[socketId],
+          videoSrc: videoSrc
+        }
       }
     })
     this.peerConnections[socketId] = peerConnection;
+    this.socket.on("candidate", (id, candidate) => {
+      this.peerConnections[socketId].addIceCandidate(new RTCIceCandidate(candidate));
+    });
   }
   // server khi nhan duoc tin hieu se gui lai socketId, signalData cho client kia
   // client nay tao peer, roi gui socketId, signalData len server o cong "receiveSuccessConnect"
   receiveConnectFromOtherClients(socketId, signalData) {
+    console.log("receiveConnectFromOtherClients: ", signalData);
     let peerConnection = new RTCPeerConnection(socketConfig);
     let stream = this.state.currentStream;
     stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
@@ -160,19 +141,40 @@ class StreamExercise extends Component {
         this.socket.emit("candidate", socketId, event.candidate);
       }
     };
-    let otherVideo = React.createRef();
+    let videoSrc = React.createRef();
     peerConnection.ontrack = event => {
-      otherVideo.current.srcObject = event.streams[0];
+      videoSrc.current.srcObject = event.streams[0];
     }
+    this.context.axios({
+      method: "GET",
+      url: Url.UserInfoBySocketId + "/" + socketId,
+    }).then(function (response) {
+      this.setState({
+        ...this.state, otherClients: {
+          ...this.state.otherClients,
+          [socketId]: {
+            ...this.state.otherClients[socketId],
+            ...response.data
+          }
+        }
+      })
+    }.bind(this));
+
     this.setState({
-      otherVideo: {
-        ...this.state.otherVideo,
-        [socketId]: otherVideo
+      ...this.state, otherClients: {
+        ...this.state.otherClients,
+        [socketId]: {
+          ...this.state.otherClients[socketId],
+          videoSrc: videoSrc
+        }
       }
     })
     this.peerConnections[socketId] = peerConnection;
-
-    console.log("receiveConnectFromOtherClients: ", signalData);
+    this.socket.on("candidate", (id, candidate) => {
+      this.peerConnections[socketId]
+        .addIceCandidate(new RTCIceCandidate(candidate))
+        .catch(e => console.error(e));
+    });
   }
   //server sau khi nhan duoc se gui lai signalData cho client thu nhat o cong "receiveSuccessConnect"
   receiveSuccessConnect(socketId, signalData) {
@@ -184,11 +186,11 @@ class StreamExercise extends Component {
     console.log("someone leave", socketId);
     if (this.peerConnections[socketId] != null) {
       this.peerConnections[socketId].close();
-      this.peerConnections[socketId] = undefined;
-      let otherVideo = { ...this.state.otherVideo };
-      delete otherVideo[socketId];
-      this.setState({ otherVideo: otherVideo });
-      console.log(this.state.otherVideo);
+      let otherClients = {
+        ...this.state.otherClients,
+      }
+      delete otherClients[socketId];
+      this.setState({ otherClients: otherClients });
     }
   }
 
@@ -210,25 +212,20 @@ class StreamExercise extends Component {
   }
 
   render() {
-    let otherVideo = Object.values(this.state.otherVideo)
+    let otherClients = Object.values(this.state.otherClients)
     return (
-      <Row>
-        <Col span={this.state.openChat ? 18 : 24} style={{ minHeight: "100vh" }}>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Layout className="site-layout">
           <Header className="site-layout-background" style={{ color: "white" }}>Tập luyện trực tiếp</Header>
           <div>
-            <video playsInline ref={this.video} autoPlay style={{ width: "300px", border: "1px solid" }} />
+            <video playsInline ref={this.video} autoPlay style={{ width: "300px" }} />
           </div>
           <div>
-            {otherVideo.map(value =>
-              <video playsInline ref={value} autoPlay style={{ width: "300px", border: "1px solid" }} />)}
+            {otherClients.map(client =>
+              <video playsInline ref={client.videoSrc} autoPlay style={{ width: "300px" }} />)}
           </div>
-        </Col>
-        <Chat
-          openChat={this.state.openChat}
-          toggleOpenChat={this.toggleOpenChat}
-        />
-      </Row>
-
+        </Layout>
+      </Layout>
     );
   }
 }

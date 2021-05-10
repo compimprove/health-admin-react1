@@ -8,29 +8,10 @@ import Url from '../service/url';
 import Utils from '../service/utils';
 import Popup from '../component/Popup';
 import { ExerciseType } from '../models/EnumDefine';
+import TrainingProgramCreator from './TrainingProgramCreator';
+import { DeleteOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 const { TabPane } = Tabs;
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'title',
-    key: 'title',
-    render: (value, record) => (
-      <Link to={Utils.createUrlWithParams(ExerciseCreator.routeName, {
-        id: record._id
-      })}>{value}</Link>
-    )
-  },
-  {
-    title: 'Length',
-    dataIndex: 'steps',
-    key: 'steps',
-    render: function (value, record, index) {
-      return <div>{value.reduce((prev, current) => prev + current.length, 0)} phút</div>
-    }
-  }
-];
 
 class TrainingOverview extends Component {
   static routeName = "/training-overview";
@@ -42,7 +23,6 @@ class TrainingOverview extends Component {
       exercises: [],
     }
   }
-
 
   componentDidMount() {
     this.getTrainingProgramData();
@@ -67,16 +47,71 @@ class TrainingOverview extends Component {
     this.setState({ exercises: response.data });
   }
 
+  async deleteExercise(id) {
+    let response = await this.context.axios({
+      method: 'DELETE',
+      url: Url.TrainerExercise + '/' + id
+    })
+    await this.getExercisesData();
+  }
+
+  columns = [
+    {
+      title: 'Name',
+      dataIndex: 'title',
+      key: 1,
+      render: (value, record) => (
+        <Link to={Utils.createUrlWithParams(ExerciseCreator.routeName, {
+          id: record._id
+        })}>{value}</Link>
+      )
+    }, {
+      title: 'Length',
+      dataIndex: 'steps',
+      key: 2,
+      render: function (value, record, index) {
+        return <div>{Utils.timeToString(value.reduce((prev, current) => prev + current.length, 0))}</div>
+      }
+    }, {
+      title: 'Action',
+      key: 3,
+      render: (text, record) => (
+        <Space size="middle">
+          <Popup
+            title="Bạn thực sự muốn xóa"
+            btnContent="Xóa"
+            btnStyle={{ danger: true }}
+            onOk={this.deleteExercise.bind(this, record._id)}>
+            <span>{`Bài tập ${record.title}`}</span>
+          </Popup>
+        </Space>
+      ),
+    }
+  ];
+
+  onChangeTab = (key) => {
+    const url = new URL(window.location);
+    url.searchParams.set('key', key);
+    window.history.pushState({}, '', url);
+  }
+
 
   render() {
+    const columns = this.columns;
+    const url = new URL(window.location);
+    const activeKey = url.searchParams.get('key') || 1;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Layout className="site-layout">
-          <Tabs defaultActiveKey="2" size="large" tabBarStyle={{ backgroundColor: "#00111e", color: "white", height: "65px" }}>
+          <Tabs
+            onChange={this.onChangeTab}
+            defaultActiveKey={activeKey}
+            size="large"
+            tabBarStyle={{ backgroundColor: "#00111e", color: "white", height: "65px" }}>
             <TabPane tab="Quản lý chương trình tập luyện" key="1">
               <Row gutter={[10, 10]} style={{ marginLeft: 10, marginRight: 10 }}>
                 <Col span={4} offset={20}>
-                  <Button type="primary"><Link to={MealProgram.routeName}>Tạo Chương trình</Link></Button>
+                  <Button type="primary"><Link to={TrainingProgramCreator.routeName}>Tạo Chương trình</Link></Button>
                 </Col>
                 {this.state.trainingPrograms.map(program => (
                   <TrainingProgramComponent key={program._id} program={program} />
@@ -90,7 +125,8 @@ class TrainingOverview extends Component {
                 </Col>
                 <Col span={24} >
                   <Table
-                    dataSource={this.state.exercises} columns={columns}
+                    dataSource={this.state.exercises}
+                    columns={columns}
                     expandable={{
                       expandedRowRender:
                         record => (
@@ -101,13 +137,12 @@ class TrainingOverview extends Component {
                               <List.Item>
                                 <Card
                                   title={ExerciseType.getString(step.exerciseType)}>
-                                  {step.title} <strong> {step.length}</strong> phút
+                                  {step.title} <strong> {Utils.timeToString(step.length)}</strong>
                                 </Card>
                               </List.Item>
                             )}
                           />),
-                      rowExpandable: record => record.name !== 'Not Expandable',
-
+                      rowExpandable: record => record.steps != null,
                     }}
                   />
                 </Col>
@@ -130,8 +165,8 @@ function TrainingProgramComponent({ program, deleteMealProgram }) {
           <Title level={5}>{program.title}</Title>
           <div>
             <Button style={{ marginRight: "10px" }} type="primary">
-              <Link to={Utils.createUrlWithParams(MealProgram.routeName, {
-                mealProgramId: program._id
+              <Link to={Utils.createUrlWithParams(TrainingProgramCreator.routeName, {
+                trainingId: program._id
               })} >Chỉnh sửa</Link>
             </Button>
             <Popup

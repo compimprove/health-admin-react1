@@ -3,6 +3,7 @@ import { UserContext } from '../context/UserContext';
 import Url from '../service/url';
 import { Button, Card, Col, Form, Input, Layout, Row, Typography } from 'antd';
 import UserData from '../models/User';
+import { ReloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import StreamExercise from './StreamExercise';
 import { Link } from 'react-router-dom';
 import localized from '../service/localized';
@@ -14,7 +15,8 @@ class Rooms extends Component {
   static contextType = UserContext;
 
   state = {
-    rooms: []
+    rooms: [],
+    loading: false
   }
 
   async componentDidMount() {
@@ -23,6 +25,7 @@ class Rooms extends Component {
 
   getRooms = async () => {
     let url;
+    this.setState({ loading: true });
     if (this.context.userData.isTrainer()) {
       url = Url.TrainerRoom
     } else if (this.context.userData.isNormalUser()) {
@@ -32,6 +35,7 @@ class Rooms extends Component {
       method: 'get',
       url: url
     })
+    this.setState({ loading: false });
     this.setState({ rooms: res.data });
     console.log("Rooms", "list room", this.state.rooms);
   }
@@ -62,7 +66,8 @@ class Rooms extends Component {
       <Layout style={{ minHeight: '100vh' }}>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ color: "white" }}>Phòng tập
-            <Button onClick={this.getRooms}>{localized.get("refresh")}</Button>
+            {!this.state.loading && <ReloadOutlined style={{ marginLeft: 20 }} onClick={this.getRooms} />}
+            {this.state.loading && <LoadingOutlined style={{ marginLeft: 20 }} />}
           </Header>
           <Row gutter={[24, 24]} style={{ marginLeft: 10, marginRight: 10, paddingTop: 20 }}>
             {isTrainer && <CreateRoom createRoom={this.createRoom} />}
@@ -96,8 +101,8 @@ const CreateRoom = function ({ createRoom }) {
           <Title level={4}>{localized.get("createRoom")}</Title>
           <Form.Item  >
             <Button type="primary" htmlType="submit">
-            {localized.get("create")}
-        </Button>
+              {localized.get("create")}
+            </Button>
           </Form.Item>
         </div>
         <Form.Item

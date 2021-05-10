@@ -9,11 +9,6 @@ import Url from '../service/url';
 import MealOverview from './MealOverview';
 const { Title } = Typography;
 
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
 
 
 class MealCreator extends React.Component {
@@ -129,7 +124,7 @@ class MealForm extends React.Component {
 
   }
 
-  setFormValue = (params) => {
+  setFormValue = () => {
 
   }
 
@@ -193,7 +188,7 @@ class MealForm extends React.Component {
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              action={Url.MealImage}
               onChange={this.handleUploadImage}
             >
               {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : <div>
