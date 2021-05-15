@@ -9,11 +9,21 @@ import StreamExercise from './StreamExercise';
 import ExerciseCreator from './ExerciseCreator';
 import TrainingOverview from './TrainingOverview';
 import TrainingProgramCreator from './TrainingProgramCreator';
+import TraineeOverview from './TraineeOverview';
+import TraineeManagement from './TraineeManagement';
 
 export const routes = [
   {
     path: ExerciseCreator.routeName,
     component: ExerciseCreator,
+  },
+  {
+    path: TraineeOverview.routeName,
+    component: TraineeOverview,
+  },
+  {
+    path: TraineeManagement.routeName,
+    component: TraineeManagement,
   },
   {
     path: TrainingOverview.routeName,

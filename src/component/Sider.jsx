@@ -10,6 +10,7 @@ import { UserContext } from '../context/UserContext';
 import Rooms from '../pages/Rooms';
 import MealOverview from '../pages/MealOverview';
 import TrainingOverview from '../pages/TrainingOverview';
+import TraineeOverview from '../pages/TraineeOverview';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -51,7 +52,7 @@ export default class AppSiderBar extends React.Component {
             <Link to={Rooms.routeName}>Phòng tập trực tuyến</Link>
           </Menu.Item>
           <Menu.Item key="sub1" icon={<UserOutlined />} >
-            <Link to={Rooms.routeName}>Quản lý User</Link>
+            <Link to={TraineeOverview.routeName}>Quản lý Học viên</Link>
           </Menu.Item>
           {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
             <Menu.Item key="6">Team 1</Menu.Item>

@@ -16,7 +16,7 @@ export const UserContext = React.createContext();
 export class UserProvider extends React.Component {
   state = {
     token: null,
-    userData: ""
+    userData: {}
   };
   timerRefreshToken = null;
   axios = axios.create();
@@ -136,7 +136,7 @@ export class UserProvider extends React.Component {
       }
     } catch (error) {
       console.error(error);
-      this._goLogin();
+      // this._goLogin();
       return {
         status: StatusCodes.INTERNAL_SERVER_ERROR
       }
