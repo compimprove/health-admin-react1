@@ -66,7 +66,10 @@ class TrainerRegisterPage extends React.Component {
     try {
       let res = await axios.post(Url.UserRegister, form);
       if (res.status == 200) {
-        window.location.pathname = LoginPage.routeName;
+        message.success("Đăng ký thành công");
+        setTimeout(() =>{
+          window.location.pathname = LoginPage.routeName;
+        }, 1000);
       } else {
         message.error("Đăng ký lỗi");
       }
@@ -166,7 +169,7 @@ class TrainerRegisterPage extends React.Component {
                     <Input style={{ width: '100%' }} />
                   </Form.Item>
 
-                  <Form.Item
+                  {/* <Form.Item
                     name="fbLink"
                     label="Facebook của bạn"
                   >
@@ -178,7 +181,7 @@ class TrainerRegisterPage extends React.Component {
                     label="Instagram của bạn"
                   >
                     <Input style={{ width: '100%' }} />
-                  </Form.Item>
+                  </Form.Item> */}
 
                   <Form.Item
                     label="Ngày sinh của bạn"

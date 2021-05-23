@@ -232,7 +232,7 @@ function TraineeDrawer({ onClose, visible, userData }) {
       dataSource={userData.exerciseHistory}
       renderItem={item => {
         let time = new Date(item.time);
-        let trainingLength = item.finishedSteps.reduce((prev, current) => prev + current.length, 0);
+        let trainingLength = item.duration;
         return (
           <List.Item>
             <List.Item.Meta

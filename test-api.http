@@ -4,7 +4,7 @@ GET https://graduate-server-project.herokuapp.com/meal
 GET https://graduate-server-project.herokuapp.com/training
 
 ###
-POST https://graduate-server-project.herokuapp.com/auth/login HTTP/1.1
+POST https://main-graduat-iycq2vr0iaqfvy9o-gtw.qovery.io/auth/login HTTP/1.1
 content-type: application/json
 
 {
