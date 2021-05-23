@@ -11,6 +11,8 @@ import Rooms from '../pages/Rooms';
 import MealOverview from '../pages/MealOverview';
 import TrainingOverview from '../pages/TrainingOverview';
 import TraineeOverview from '../pages/TraineeOverview';
+import { routes } from '../pages/routes';
+
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -28,39 +30,30 @@ export default class AppSiderBar extends React.Component {
     this.setState({ collapsed });
   };
 
+  filterMenuRoutes(userRole) {
+    return routes.filter((element) => element.role && element.role.indexOf(userRole) !== -1);
+  }
+
   render() {
     const { collapsed } = this.state;
     const userData = this.context.userData;
+    let routes = [];
+    if (userData != null)
+      routes = this.filterMenuRoutes(userData.role);
 
     return (
       <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
         <div style={{ height: "60px" }}>
-
         </div>
         <Menu theme="dark" defaultSelectedKeys={[this.defaultSelectedRoute]} mode="inline">
-
-          {/* <Menu.Item key={Home.routeName} icon={<PieChartOutlined />}>
-            <Link to={Home.routeName}>Over view</Link>
-          </Menu.Item> */}
-          <Menu.Item key={TrainingOverview.routeName} icon={<DesktopOutlined />}>
-            <Link to={TrainingOverview.routeName}>Quản lý các bài tập</Link>
-          </Menu.Item>
-          <Menu.Item key={MealOverview.routeName} icon={<DesktopOutlined />}>
-            <Link to={MealOverview.routeName}>Quản lý dinh dưỡng</Link>
-          </Menu.Item>
-          <Menu.Item key={Rooms.routeName} icon={<DesktopOutlined />}>
-            <Link to={Rooms.routeName}>Phòng tập trực tuyến</Link>
-          </Menu.Item>
-          <Menu.Item key="sub1" icon={<UserOutlined />} >
-            <Link to={TraineeOverview.routeName}>Quản lý Học viên</Link>
-          </Menu.Item>
-          {/* <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-            <Menu.Item key="6">Team 1</Menu.Item>
-            <Menu.Item key="8">Team 2</Menu.Item>
-          </SubMenu>
-          <Menu.Item key="9" icon={<FileOutlined />}>
-            Files
-            </Menu.Item> */}
+          {routes.map(route => {
+            let icon = route.icon || <DesktopOutlined />
+            let menuName = route.menuName || "Menu"
+            return (
+              <Menu.Item key={route.path} icon={icon}>
+                <Link to={route.path}>{menuName}</Link>
+              </Menu.Item>);
+          })}
         </Menu>
       </Sider>
     );

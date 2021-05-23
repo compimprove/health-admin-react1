@@ -11,6 +11,7 @@ import { UserContext } from './context/UserContext';
 import { Layout } from 'antd';
 const { Content } = Layout;
 import AppSiderBar from './component/Sider';
+import TrainerRegisterPage from './pages/TrainerRegisterPage';
 
 export default function App() {
   const { isLogin } = React.useContext(UserContext);
@@ -19,6 +20,9 @@ export default function App() {
       <Switch>
         <Route path="/login" >
           <LoginPage />
+        </Route>
+        <Route path={TrainerRegisterPage.routeName} >
+          <TrainerRegisterPage />
         </Route>
         {isLogin() && < Route >
           <Layout>

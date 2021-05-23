@@ -4,6 +4,8 @@ import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 import React from 'react';
 import { UserContext } from '../context/UserContext';
+import { Link } from 'react-router-dom';
+import TrainerRegisterPage from './TrainerRegisterPage';
 const { Header, Footer, Sider, Content } = Layout;
 
 
@@ -20,9 +22,9 @@ function _LoginPage({ login }) {
   return (
     <>
       <Layout style={{ minHeight: "100vh", width: "100%" }}>
-        <Header>Login</Header>
+        <Header>Đăng nhập</Header>
         <Content>
-          <Card style={{ width: "400px", marginLeft: "auto", marginRight: "auto", marginTop: "50px" }} title="Login">
+          <Card style={{ width: "400px", marginLeft: "auto", marginRight: "auto", marginTop: "50px" }} title="Đăng nhập">
             <Form
               style={{ width: "300px" }}
               name="normal_login"
@@ -38,42 +40,39 @@ function _LoginPage({ login }) {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Username!',
+                    message: 'Hãy nhập email của bạn!',
                   },
                 ]}
               >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
               </Form.Item>
               <Form.Item
                 name="password"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your Password!',
+                    message: 'Hãy nhập mật khẩu của bạn!',
                   },
                 ]}
               >
                 <Input
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
-                  placeholder="Password"
+                  placeholder="Mật khẩu"
                 />
               </Form.Item>
               <Form.Item>
                 <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
+                  <Checkbox>Nhớ mật khẩu của tôi</Checkbox>
                 </Form.Item>
-
-                <a className="login-form-forgot" href="">
-                  Forgot password
-                </a>
               </Form.Item>
 
               <Form.Item>
-                <Button style={{ marginRight: "20px" }} type="primary" htmlType="submit" className="login-form-button">
-                  Log in
+                <Button style={{ marginRight: "20px", marginBottom: "10px" }} type="primary" htmlType="submit" className="login-form-button">
+                  Đăng nhập
                 </Button>
-                  Or <a href="">register now!</a>
+                <br />
+                  Hoặc <Link to={TrainerRegisterPage.routeName}>đăng ký trở thành huấn luyện viên</Link>
               </Form.Item>
             </Form>
 

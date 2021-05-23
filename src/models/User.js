@@ -13,10 +13,15 @@ class UserData {
 }
 
 UserData.Role = {
-  Trainer: "trainer",
   Admin: "admin",
+  Trainer: "trainer",
   User: "user",
-  PremiumUser: "premiumUser"
+}
+
+UserData.RoleName = {
+  [UserData.Role.Admin]: "Quản trị viên",
+  [UserData.Role.Trainer]: "Huấn luyện viên",
+  [UserData.Role.User]: "Người dùng",
 }
 
 export default UserData;

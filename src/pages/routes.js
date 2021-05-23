@@ -11,23 +11,58 @@ import TrainingOverview from './TrainingOverview';
 import TrainingProgramCreator from './TrainingProgramCreator';
 import TraineeOverview from './TraineeOverview';
 import TraineeManagement from './TraineeManagement';
+import {
+  DesktopOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import UserData from '../models/User';
+import UserManagement from './UserManagement';
+import TrainerRegisterPage from './TrainerRegisterPage';
+
 
 export const routes = [
   {
-    path: ExerciseCreator.routeName,
-    component: ExerciseCreator,
+    path: UserManagement.routeName,
+    component: UserManagement,
+    menuName: "Quản lý User",
+    icon: <UserOutlined />,
+    role: [UserData.Role.Admin]
+  },
+  {
+    path: Rooms.routeName,
+    component: Rooms,
+    menuName: "Phòng tập trực tuyến",
+    icon: <DesktopOutlined />,
+    role: [UserData.Role.User, UserData.Role.Trainer]
+  },
+  {
+    path: MealOverview.routeName,
+    component: MealOverview,
+    menuName: "Quản lý dinh dưỡng",
+    icon: <DesktopOutlined />,
+    role: [UserData.Role.Trainer, UserData.Role.Admin]
   },
   {
     path: TraineeOverview.routeName,
     component: TraineeOverview,
+    menuName: "Quản lý Học viên",
+    icon: <UserOutlined />,
+    role: [UserData.Role.Trainer]
+  },
+  {
+    path: TrainingOverview.routeName,
+    component: TrainingOverview,
+    menuName: "Quản lý các bài tập",
+    icon: <DesktopOutlined />,
+    role: [UserData.Role.Trainer, UserData.Role.Admin]
   },
   {
     path: TraineeManagement.routeName,
     component: TraineeManagement,
   },
   {
-    path: TrainingOverview.routeName,
-    component: TrainingOverview,
+    path: ExerciseCreator.routeName,
+    component: ExerciseCreator,
   },
   {
     path: TrainingProgramCreator.routeName,
@@ -38,20 +73,12 @@ export const routes = [
     component: MealCreator
   },
   {
-    path: MealOverview.routeName,
-    component: MealOverview
-  },
-  {
     path: MealProgram.routeName,
     component: MealProgram
   },
   {
     path: StreamExercise.routeName,
     component: StreamExercise
-  },
-  {
-    path: Rooms.routeName,
-    component: Rooms
   },
   {
     path: Home.routeName,

@@ -7,6 +7,7 @@ const Url = {
   Room: host + "/room",
   UserInfoBySocketId: host + "/user/socketId",
   RoomInfo: host + "/room",
+  UserRegister: host + "/auth/signup",
   TrainerRoom: host + "/trainer/room",
   TrainerMeal: host + "/trainer/meal",
   TrainerTraining: host + "/trainer/training",
@@ -16,6 +17,11 @@ const Url = {
   TrainerCurrentTrainee: host + "/trainer/current-trainee",
   TrainerRegisteredTrainee: host + "/trainer/registered-trainee",
   TrainerTraineeData: host + "/trainer/trainee",
+  AdminUser: host + "/admin/user",
+  AdminTrainer: host + "/admin/trainer",
+  AdminUserTrainer: host + "/admin/user-trainer",
+  AdminUserTrainerRegister: host + "/admin/user-trainer-register",
+  AdminChangeRole: host + "/admin/change-role",
   MealImage: host + "/file/image",
 };
 export default Url;

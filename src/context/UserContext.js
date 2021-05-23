@@ -8,17 +8,15 @@ import {
   StatusCodes,
 } from 'http-status-codes';
 
-const tokenLength = 60 * 1000; // milliseconds
 
-
+const tokenLength = 20 * 1000; // milliseconds
 export const UserContext = React.createContext();
 
 export class UserProvider extends React.Component {
   state = {
     token: null,
-    userData: {}
+    userData: null
   };
-  timerRefreshToken = null;
   axios = axios.create();
 
   constructor(props) {
@@ -49,7 +47,7 @@ export class UserProvider extends React.Component {
       this.setState({
         token,
         userData: new UserData(response.data)
-      })
+      });
     }
     else {
       this._goLogin();
@@ -75,9 +73,6 @@ export class UserProvider extends React.Component {
       }
     });
     if (response.status == 200) {
-      if (window.location.pathname == LoginPage.routeName) {
-        window.location.pathname = Home.routeName;
-      }
       let token = response.data.token;
       localStorage.setItem("token", token)
       console.log("login success: ", Url.Login, "values: ", { email, password }, "response", response.data);
@@ -87,30 +82,28 @@ export class UserProvider extends React.Component {
         url: Url.UserData
       })
       if (res.status == 200) {
+        let userData = new UserData(res.data)
         this.setState({
           token,
-          userData: new UserData(res.data)
+          userData
         });
-        if (this.timerRefreshToken != null) {
-          this.timerRefreshToken.cancel();
-        }
-        this.timerRefreshToken = setTimeout(() => {
-          this.refreshToken();
-        }, tokenLength - 15 * 1000)
-      }
-      window.location.pathname = Home.routeName
-    }
-  }
+        console.log(userData.role);
 
-  refreshToken() {
-    console.log("refresh token");
-    let response = this.axiosCall({
-      method: "post",
-      url: Url.RefreshToken
-    });
-    this.setState({
-      token: response.data.token
-    })
+        switch (userData.role) {
+          case UserData.Role.Admin:
+            window.location.pathname = "/user-management";
+            break;
+          case UserData.Role.Trainer:
+            window.location.pathname = "/trainee-overview";
+            break;
+          case UserData.Role.User:
+            window.location.pathname = "/stream-exercise/room";
+            break;
+        }
+
+      }
+
+    }
   }
 
   isLogin = () => {
@@ -144,9 +137,6 @@ export class UserProvider extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.timerRefreshToken != null) {
-      this.timerRefreshToken.cancel();
-    }
   }
 
   render() {

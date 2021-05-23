@@ -18,13 +18,22 @@ const Popup = ({ title, onOk, onCancel, btnStyle, btnContent, children }) => {
       onCancel();
     setIsModalVisible(false);
   };
+  let okButtonProps = {};
+  if (btnStyle && btnStyle.danger) {
+    okButtonProps = { danger: true };
+  }
 
   return (
     <>
       <Button {...btnStyle} onClick={showModal}>
         {btnContent}
       </Button>
-      <Modal title={title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        title={title}
+        visible={isModalVisible}
+        onOk={handleOk}
+        okButtonProps={okButtonProps}
+        onCancel={handleCancel}>
         {children}
       </Modal>
     </>

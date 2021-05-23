@@ -35,8 +35,12 @@ class TraineeOverview extends Component {
     let response = await this.context.axios({
       url: Url.TrainerCurrentTrainee
     })
+    let currentTrainee = response.data;
+    currentTrainee.sort(function (trainee1, trainee2) {
+      return trainee2.created - trainee1.created;
+    });
     this.setState({
-      currentTrainee: response.data
+      currentTrainee
     })
   }
 
@@ -44,8 +48,12 @@ class TraineeOverview extends Component {
     let response = await this.context.axios({
       url: Url.TrainerRegisteredTrainee
     })
+    let registeredTrainee = response.data;
+    registeredTrainee.sort(function (trainee1, trainee2) {
+      return trainee2.created - trainee1.created;
+    });
     this.setState({
-      registeredTrainee: response.data
+      registeredTrainee
     })
   }
 
@@ -78,6 +86,11 @@ class TraineeOverview extends Component {
     this.setState({ traineeData: response.data });
   }
 
+  getDateTimeString(milliseconds) {
+    let date = new Date(milliseconds);
+    return `${date.getHours()}:${date.getMinutes()} ${date.getDate()} / ${date.getMonth() + 1}`
+  }
+
   render() {
     return (
       <MainLayout title="Quản lý học viên">
@@ -88,17 +101,17 @@ class TraineeOverview extends Component {
               itemLayout="horizontal"
               dataSource={this.state.currentTrainee}
               pagination={{
-                pageSize: 8,
+                pageSize: 7,
               }}
               renderItem={item => {
-                let dateJoin = new Date(item.created);
+
                 return (
                   <List.Item
                   >
                     <List.Item.Meta
                       avatar={<Avatar src={item.avatar} />}
                       title={<a onClick={this.showTraineeDrawer.bind(this, item._id)} >{item.name}</a>}
-                      description={`Tham gia từ ${dateJoin.getDate()} / ${dateJoin.getMonth() + 1}`}
+                      description={`Tham gia từ ${this.getDateTimeString(item.created)}`}
                     />
                   </List.Item>)
               }}
@@ -110,10 +123,9 @@ class TraineeOverview extends Component {
               itemLayout="horizontal"
               dataSource={this.state.registeredTrainee}
               pagination={{
-                pageSize: 8,
+                pageSize: 7,
               }}
               renderItem={item => {
-                let dateJoin = new Date(item.created);
                 return (
                   <List.Item
                     extra={<Popup
@@ -127,7 +139,7 @@ class TraineeOverview extends Component {
                     <List.Item.Meta
                       avatar={<Avatar src={item.avatar} />}
                       title={<a onClick={this.showTraineeDrawer.bind(this, item._id)} >{item.name}</a>}
-                      description={`Đăng ký vào ${dateJoin.getDate()} / ${dateJoin.getMonth() + 1}`}
+                      description={`Đăng ký vào ${this.getDateTimeString(item.created)}`}
                     />
                   </List.Item>)
               }}

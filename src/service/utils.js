@@ -12,6 +12,17 @@ const Utils = {
       let minutes = Math.floor(seconds / 60);
       return `${minutes / 60} giờ ${minutes % 60} phút`;
     }
+  },
+  getDateTimeString(timeString) {
+    let date = new Date(timeString);
+    return `${Utils.getFixedStringNumber(date.getHours(), 2)}:${Utils.getFixedStringNumber(date.getMinutes(), 2)} ${Utils.getFixedStringNumber(date.getDate(), 2)} / ${Utils.getFixedStringNumber(date.getMonth() + 1, 2)}`
+  },
+  getFixedStringNumber(number, fixed) {
+    let numberString = number + "";
+    if (numberString.length >= fixed) {
+      return numberString;
+    }
+    return new Array(fixed - numberString.length).fill("0").join() + numberString;
   }
 }
 
