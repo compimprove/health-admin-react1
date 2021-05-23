@@ -8,6 +8,7 @@ import Url from '../service/url';
 import Utils from '../service/utils';
 import { MinusCircleOutlined, PlusOutlined, SaveOutlined, CheckOutlined, MinusOutlined } from '@ant-design/icons';
 import Popup from '../component/Popup';
+import RoleManagement from '../component/RoleManagement';
 
 
 class UserManagement extends Component {
@@ -156,12 +157,14 @@ class UserManagement extends Component {
           </Col>
         </Row>
         <UserDrawer
+          getUsersData={this.getUsersData}
           onClose={this.onCloseUserDrawer}
           visible={this.state.showUserDrawer}
           userData={this.state.userData}
         >
         </UserDrawer>
         <TrainerDrawer
+          getUsersData={this.getUsersData}
           onClose={this.onCloseTrainerDrawer}
           visible={this.state.showTrainerDrawer}
           trainerData={this.state.trainerData}
@@ -175,7 +178,7 @@ class UserManagement extends Component {
 }
 
 
-function UserDrawer({ onClose, visible, userData }) {
+function UserDrawer({ getUsersData, onClose, visible, userData }) {
   let height, weight, joiningDate;
   if (userData != null) {
     height = userData.height / 100;
@@ -195,8 +198,8 @@ function UserDrawer({ onClose, visible, userData }) {
           <Col span={12}>
             <p><Avatar size={70} src={userData.avatar} style={{ marginRight: "10px" }} /> {userData.name}</p>
           </Col>
-          <Col span={12}>
-            <p>{UserData.RoleName[userData.role]}</p>
+          <Col span={12} style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <RoleManagement getUsersData={getUsersData} userData={userData} />
           </Col>
         </Row>
         <Divider />
@@ -271,7 +274,7 @@ function UserDrawer({ onClose, visible, userData }) {
   </Drawer >)
 }
 
-function TrainerDrawer({ onClose, visible, trainerData, deleteRegister, acceptRegister, deleteUserTrainer }) {
+function TrainerDrawer({ getUsersData, onClose, visible, trainerData, deleteRegister, acceptRegister, deleteUserTrainer }) {
   let joiningDate
   if (trainerData != null) {
     joiningDate = new Date(trainerData.created);
@@ -291,9 +294,7 @@ function TrainerDrawer({ onClose, visible, trainerData, deleteRegister, acceptRe
             <p><Avatar size={70} src={trainerData.avatar} style={{ marginRight: "10px" }} /> {trainerData.name}</p>
           </Col>
           <Col span={12} style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <Row>
-              <span>{UserData.RoleName[trainerData.role]}</span>
-            </Row>
+            <RoleManagement getUsersData={getUsersData} userData={trainerData} />
           </Col>
         </Row>
         <Divider />

@@ -135,7 +135,7 @@ class MealProgram extends Component {
           <Form.Item
             label={localized.get("foodName")}
             name="title"
-            rules={[{ required: true, message: 'Please input the food name!' }]}
+            rules={[{ required: true, message: 'Hãy nhập tên bữa ăn' }]}
           >
             <Input />
           </Form.Item>
@@ -147,12 +147,12 @@ class MealProgram extends Component {
             <Input.TextArea autoSize placeholder={localized.get("description")} />
           </Form.Item>
           <Form.Item
-            label={localized.get("Meals")}
+            label="Bữa ăn"
           >
             <Space style={{ marginTop: 6, marginBottom: 20, display: 'flex', flexDirection: 'row' }} >
-              <span style={{ marginRight: 190 }}>{localized.get("mealName")}</span>
-              <span style={{ marginRight: 50 }}>{localized.get("week")}</span>
-              <span>{localized.get("day")}</span>
+              <span style={{ marginRight: 190 }}>Tên bữa ăn</span>
+              <span style={{ marginRight: 50 }}>Tuần</span>
+              <span>Ngày</span>
             </Space>
             <Form.List
               name="meals"
@@ -166,7 +166,7 @@ class MealProgram extends Component {
                         {...restField}
                         name={[name, 'mealId']}
                         fieldKey={[fieldKey, 'mealId']}
-                        rules={[{ required: true, message: 'Missing name' }]}
+                        rules={[{ required: true, message: 'Bạn chưa chọn bữa ăn' }]}
                       >
                         <Select
                           style={{ width: 250 }}
@@ -181,7 +181,7 @@ class MealProgram extends Component {
                         {...restField}
                         name={[name, 'week']}
                         fieldKey={[fieldKey, 'week']}
-                        rules={[{ required: true, message: 'Missing last name' }]}
+                        rules={[{ required: true, message: 'Bạn chưa nhập tuần' }]}
                       >
                         <InputNumber placeholder={localized.get("week")} onChange={value => {
                           this.changeFormValueByIndex("meals", key, "week", value)
@@ -191,7 +191,7 @@ class MealProgram extends Component {
                         {...restField}
                         name={[name, 'day']}
                         fieldKey={[fieldKey, 'day']}
-                        rules={[{ required: true, message: 'Missing last name' }]}
+                        rules={[{ required: true, message: 'Bạn chưa chọn ngày' }]}
                       >
                         <InputNumber placeholder={localized.get("day")} onChange={value => {
                           this.changeFormValueByIndex("meals", key, "day", value)
@@ -212,12 +212,12 @@ class MealProgram extends Component {
           </Form.Item>
           <Form.Item
             name="users"
-            label={localized.get("users")}
+            label="Học viên sử dụng"
           >
             <Select
               mode="multiple"
               style={{ width: '100%' }}
-              placeholder="Tags Mode">
+              placeholder="Chọn học viên">
               {this.state.trainees.map(trainee =>
                 <Option value={trainee._id}>{trainee.name}</Option>
               )}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { UserContext } from '../context/UserContext';
-import { Avatar, Button, Card, Col, Form, Input, Layout, List, Row, Space, Table, Tabs, Typography } from 'antd';
+import { Avatar, Button, Card, Col, Form, Input, Layout, List, message, Row, Space, Table, Tabs, Typography } from 'antd';
 import MealProgram from './MealProgram';
 import { Link } from 'react-router-dom';
 import ExerciseCreator from './ExerciseCreator';
@@ -95,6 +95,14 @@ class TrainingOverview extends Component {
     window.history.pushState({}, '', url);
   }
 
+  async deleteTrainingProgram(trainingId) {
+    let response = await this.context.axios({
+      method: 'DELETE',
+      url: Url.TrainerTraining + '/' + trainingId
+    })
+    message.success("Xóa thành công");
+    this.getTrainingProgramData();
+  }
 
   render() {
     const columns = this.columns;
@@ -113,8 +121,12 @@ class TrainingOverview extends Component {
                 <Col span={4} offset={20}>
                   <Button type="primary"><Link to={TrainingProgramCreator.routeName}>Tạo Chương trình</Link></Button>
                 </Col>
-                {this.state.trainingPrograms.map(program => (
-                  <TrainingProgramComponent key={program._id} program={program} />
+                {this.state.trainingPrograms && this.state.trainingPrograms.map(program => (
+                  <TrainingProgramComponent
+                    key={program._id}
+                    program={program}
+                    deleteTrainingProgram={this.deleteTrainingProgram.bind(this, program._id)}
+                  />
                 ))}
               </Row>
             </TabPane>
@@ -155,7 +167,7 @@ class TrainingOverview extends Component {
 }
 
 
-function TrainingProgramComponent({ program, deleteMealProgram }) {
+function TrainingProgramComponent({ program, deleteTrainingProgram }) {
   return (
     <Col span={12}>
       <Card
@@ -172,10 +184,10 @@ function TrainingProgramComponent({ program, deleteMealProgram }) {
             <Popup
               btnStyle={{ type: "primary", danger: true }}
               btnContent="Xóa"
-              onOk={deleteMealProgram}
+              onOk={deleteTrainingProgram}
               title="Bạn thực sự muốn xóa"
             >
-              <span>{program.title}</span>
+              <span>Chương trình{program.title}</span>
             </Popup>
           </div>
         </div>

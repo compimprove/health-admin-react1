@@ -5,6 +5,7 @@ import { LogUtils } from "../service/logUtils";
 import { UploadOutlined } from '@ant-design/icons';
 import { ExerciseType } from "../models/EnumDefine";
 import Utils from "../service/utils";
+import Url from "../service/url";
 
 const { Step } = Steps;
 
@@ -99,6 +100,16 @@ const StepCreator = ({ setAllSteps, steps }) => {
     return result;
   }
 
+  const saveCurrentStepVideoUrl = e => {
+    let newSteps = [...steps];
+    if (newSteps[currentStep] != null) {
+      newSteps[currentStep].videoUrl = e.target.value;
+      setSteps(newSteps);
+    } else {
+      LogUtils.error("onUploadVideo", value);
+    }
+  }
+
   const getCurrentDescription = () => {
     let result = "";
     if (steps[currentStep]) {
@@ -108,9 +119,28 @@ const StepCreator = ({ setAllSteps, steps }) => {
     return result;
   }
 
-  const onUploadFile = ({ file, fileList, event }) => {
-    LogUtils.log("onUploadFile state change");
-    LogUtils.log(file, fileList, event);
+  const onUploadVideo = info => {
+    if (info.file.status === 'uploading') {
+      return;
+    }
+    if (info.file.status === 'done') {
+      let newSteps = [...steps];
+      if (newSteps[currentStep] != null) {
+        newSteps[currentStep].videoUrl = info.file.response.url;
+        setSteps(newSteps);
+      } else {
+        LogUtils.error("onUploadVideo", value);
+      }
+    }
+  };
+
+  const getCurrentVideoUrl = () => {
+    let result = "";
+    if (steps[currentStep]) {
+      result = steps[currentStep].videoUrl || "";
+    }
+    LogUtils.log("getCurrentVideoUrl", result)
+    return result;
   }
 
   const setStep = (index, value) => {
@@ -183,14 +213,27 @@ const StepCreator = ({ setAllSteps, steps }) => {
           <Input.TextArea autoSize={{ minRows: 3 }} allowClear value={getCurrentDescription()} onChange={setCurrentDescription} />
           <Divider orientation="left">Video hướng dẫn</Divider>
           <Upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            name="video"
             listType="picture"
             maxCount={1}
-            onChange={onUploadFile}
+            action={Url.ExerciseVideo}
+            onChange={onUploadVideo}
+            beforeUpload={file => {
+              if (file.type !== 'video/mp4') {
+                message.error(`${file.name} is not a video mp4 file`);
+              }
+              return file.type === 'video/mp4' ? true : Upload.LIST_IGNORE;
+            }}
           >
             <Button icon={<UploadOutlined />}>Upload Video</Button>
           </Upload>
-          <Input disabled={uploadType} placeholder="Link video" style={{ marginTop: 10 }} />
+          <Input value={getCurrentVideoUrl()} placeholder="Link video" style={{ marginTop: 10, marginBottom: 30 }} onChange={saveCurrentStepVideoUrl} />
+          {getCurrentVideoUrl() != null
+            && getCurrentVideoUrl() != ""
+            && <video style={{ width: 500 }} controls src={getCurrentVideoUrl()} />}
+          {getCurrentVideoUrl() == null
+            || getCurrentVideoUrl() == ""
+            && <span>Không có video</span>}
         </div>
       </div>
       {steps.length > 0 && <div className="steps-action">

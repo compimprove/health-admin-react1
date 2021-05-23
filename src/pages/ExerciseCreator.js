@@ -105,7 +105,7 @@ class ExerciseCreator extends React.Component {
   render() {
     return (
       <MainLayout title="Tạo bài tập">
-        <a onClick={this.clearTrainingState}>Tạo bài tập mới từ bài này</a>
+        {/* <a onClick={this.clearTrainingState}>Tạo bài tập mới từ bài này</a> */}
         <Form
           ref={this.formRef}
           name="training-creator"

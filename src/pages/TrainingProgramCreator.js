@@ -126,7 +126,7 @@ class TrainingProgramCreator extends Component {
   render() {
     return (
       <MainLayout>
-        <Button onClick={this.clearTrainingState}>Tạo bài tập mới từ bài này</Button>
+        {/* <Button onClick={this.clearTrainingState}>Tạo bài tập mới từ bài này</Button> */}
         <Form
           ref={this.formRef}
           style={{ width: 600, marginTop: 30 }}
@@ -136,9 +136,9 @@ class TrainingProgramCreator extends Component {
           onFinishFailed={this.onFinishFailed}
         >
           <Form.Item
-            label={localized.get("foodName")}
+            label="Tên chương trình"
             name="title"
-            rules={[{ required: true, message: 'Please input the food name!' }]}
+            rules={[{ required: true, message: 'Hãy nhập tên chương trình' }]}
           >
             <Input />
           </Form.Item>
@@ -150,12 +150,12 @@ class TrainingProgramCreator extends Component {
             <Input.TextArea autoSize placeholder={localized.get("description")} />
           </Form.Item>
           <Form.Item
-            label={localized.get("Meals")}
+            label="Danh sách bài tập"
           >
             <Space style={{ marginTop: 6, marginBottom: 20, display: 'flex', flexDirection: 'row' }} >
-              <span style={{ marginRight: 190 }}>{localized.get("trainingName")}</span>
-              <span style={{ marginRight: 50 }}>{localized.get("week")}</span>
-              <span>{localized.get("day")}</span>
+              <span style={{ marginRight: 190 }}>Tên bài tập</span>
+              <span style={{ marginRight: 50 }}>Tuần</span>
+              <span>Ngày</span>
             </Space>
             <Form.List
               name="exercises"
@@ -169,11 +169,11 @@ class TrainingProgramCreator extends Component {
                         {...restField}
                         name={[name, 'exerciseId']}
                         fieldKey={[fieldKey, 'exerciseId']}
-                        rules={[{ required: true, message: 'Missing name' }]}
+                        rules={[{ required: true, message: 'Thiếu tên' }]}
                       >
                         <Select
                           style={{ width: 250 }}
-                          placeholder="Choose A Exercise"
+                          placeholder="Chọn một bài tập"
                         >
                           {this.state.exercises.map(exercise => (
                             <Option key={exercise._id}>{exercise.title}</Option>
@@ -184,7 +184,7 @@ class TrainingProgramCreator extends Component {
                         {...restField}
                         name={[name, 'week']}
                         fieldKey={[fieldKey, 'week']}
-                        rules={[{ required: true, message: 'Missing last name' }]}
+                        rules={[{ required: true, message: 'Bạn hãy nhập tuần' }]}
                       >
                         <InputNumber placeholder={localized.get("week")} onChange={value => {
                           this.changeFormValueByIndex("exercises", key, "week", value)
@@ -194,7 +194,7 @@ class TrainingProgramCreator extends Component {
                         {...restField}
                         name={[name, 'day']}
                         fieldKey={[fieldKey, 'day']}
-                        rules={[{ required: true, message: 'Missing last name' }]}
+                        rules={[{ required: true, message: 'Bạn hãy nhập ngày' }]}
                       >
                         <InputNumber placeholder={localized.get("day")} onChange={value => {
                           this.changeFormValueByIndex("exercises", key, "day", value)
@@ -205,7 +205,7 @@ class TrainingProgramCreator extends Component {
                   ))}
                   <Form.Item>
                     <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                      {localized.get("nutritionIngredient")}
+                      Thêm bài tập
                     </Button>
                   </Form.Item>
                 </>
@@ -215,12 +215,12 @@ class TrainingProgramCreator extends Component {
           </Form.Item>
           <Form.Item
             name="users"
-            label={localized.get("users")}
+            label="Học viên sử dụng"
           >
             <Select
               mode="multiple"
               style={{ width: '100%' }}
-              placeholder="Tags Mode">
+              placeholder="Chọn học viên">
               {this.state.trainees.map(trainee =>
                 <Option value={trainee._id}>{trainee.name}</Option>
               )}

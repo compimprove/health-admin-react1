@@ -12,6 +12,7 @@ import MealOverview from '../pages/MealOverview';
 import TrainingOverview from '../pages/TrainingOverview';
 import TraineeOverview from '../pages/TraineeOverview';
 import { routes } from '../pages/routes';
+import LoginPage from '../pages/LoginPage';
 
 
 const { Sider } = Layout;
@@ -54,6 +55,9 @@ export default class AppSiderBar extends React.Component {
                 <Link to={route.path}>{menuName}</Link>
               </Menu.Item>);
           })}
+          <Menu.Item key={LoginPage.routeName} icon={<UserOutlined />}>
+            <Link to={LoginPage.routeName}>Đăng xuất</Link>
+          </Menu.Item>
         </Menu>
       </Sider>
     );
