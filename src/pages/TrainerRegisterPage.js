@@ -46,7 +46,7 @@ class TrainerRegisterPage extends React.Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    if (process.env.REACT_APP_IS_DEVELOPMENT) {
+    if (process.env.REACT_APP_IS_DEVELOPMENT == "true") {
       this.formRef.current.setFieldsValue({
         name: "DinhNT",
         email: "dinh@gmail.com",
