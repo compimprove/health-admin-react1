@@ -54,7 +54,7 @@ class ExerciseCreator extends React.Component {
     console.log('Received values of form:', form);
     form.steps = this.state.steps;
     let id = this.id;
-    if (id == null) {
+    if (id == null || id == "") {
       this.createExercise(form)
     } else {
       this.editExercise(form, id);

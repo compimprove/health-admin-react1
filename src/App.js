@@ -5,7 +5,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import appRoutes from './pages/routes';
+import AppRoutes from './pages/routes';
 import "./App.css";
 import { UserContext } from './context/UserContext';
 import { Layout } from 'antd';
@@ -24,11 +24,11 @@ export default function App() {
         <Route path={TrainerRegisterPage.routeName} >
           <TrainerRegisterPage />
         </Route>
-        {isLogin() && < Route >
+        {isLogin() && <Route >
           <Layout>
             <AppSiderBar />
             <Layout className="site-layout">
-              <Content>{appRoutes()}</Content>
+              <Content><AppRoutes /></Content>
             </Layout>
           </Layout>
         </Route>}

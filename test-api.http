@@ -22,8 +22,8 @@ POST http://localhost:3010/auth/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "congnv@gmail.com",
-    "password": "congnv"
+    "email": "ducnv@gmail.com",
+    "password": "ducnv"
 }
 
 ###
@@ -36,7 +36,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbmdud
 }
 
 ###
-GET http://localhost:3010/trainer/meal
+GET http://localhost:3010/training
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbmdudkBnbWFpbC5jb20iLCJpZCI6IjYwODZkMjQ0NDk0MDIxMGYwZTM0MzI3MiIsImlhdCI6MTYxOTQ0ODQxOCwiZXhwIjoxNjE5NDUyMDE4fQ.YVMojbtjaLCwPMjvuzEg6or6Mh_XMe3fbTq2y2WK-R4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImR1Y252QGdtYWlsLmNvbSIsImlkIjoiNjBiMWFlNmU1YTgxOWMzNjgxYTlmNGY4IiwiaWF0IjoxNjIyMjU3NTMyLCJleHAiOjE2MjIyNjgzMzJ9.ClodBCTGAMoMrZL6KssZ_IW6__RYKINakTZeIaKcl78
 

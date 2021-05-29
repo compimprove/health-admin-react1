@@ -59,6 +59,14 @@ class MealForm extends React.Component {
   async componentDidMount() {
     if (this.state.mealId != null) {
       await this.getMealsData();
+    } else {
+      this.formRef.current.setFieldsValue({
+        nutritions: [
+          { name: "protein", amount: 0 },
+          { name: "carbohydrates", amount: 0 },
+          { name: "fat", amount: 0 },
+        ],
+      })
     }
   }
 
@@ -104,21 +112,29 @@ class MealForm extends React.Component {
       form.directions = form.directions.map(value => value.name);
     }
     form.imageUrl = this.state.imageUrl;
-    if (this.state.mealId != null) {
+    if (this.state.mealId != null && this.state.mealId != "") {
       await this.context.axios({
         method: "PUT",
         url: Url.TrainerMeal + "/" + this.state.mealId,
         data: form
       })
+      await this.getMealsData();
+      message.success("Cập nhật bữa ăn thành công")
     } else {
-      await this.context.axios({
+      let response = await this.context.axios({
         method: "POST",
         url: Url.TrainerMeal,
         data: form
       })
+      message.success("Tạo bữa ăn thành công");
+      console.log("get mealId", this.state.mealId, response.data);
+      this.formRef.current.setFieldsValue(this.transformReponseDataToFormData(response.data))
+      this.setState({
+        initData: response.data,
+        imageUrl: response.data.imageUrl
+      });
     }
-    await this.getMealsData();
-    message.success("Cập nhật bữa ăn thành công")
+
   }
   onFinishFailed = () => {
 
@@ -225,7 +241,6 @@ class MealForm extends React.Component {
           <Form.Item
             label={localized.get("type")}
             name="type"
-            rules={[{ required: true, message: 'Please input the type!' }]}
           >
             <Radio.Group
               buttonStyle="solid">
@@ -294,6 +309,7 @@ class MealForm extends React.Component {
                           this.changeFormValueByIndex("nutritions", key, "amount", value)
                         }} />
                       </Form.Item>
+                      mg
                       <MinusCircleOutlined onClick={() => remove(name)} />
                     </Space>
                   ))}

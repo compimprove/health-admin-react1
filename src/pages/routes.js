@@ -87,19 +87,25 @@ export const routes = [
 
 ];
 
-export default () => (
-  <Switch>
-    {routes.map(({ path, exact = false, component: Component, ...rest }) => {
-      return (
-        <Route
-          key={path}
-          exact={exact}
-          path={path}
-          component={Component}
-          {...rest}
-        />
-      );
-    })}
-    <Redirect to='/not-found' />
-  </Switch>
-);
+class AppRoutes extends React.Component {
+  render() {
+    return (
+      <Switch>
+        {routes.map(({ path, exact = false, component: Component, ...rest }) => {
+          return (
+            <Route
+              key={path}
+              exact={exact}
+              path={path}
+              component={Component}
+              {...rest}
+            />
+          );
+        })}
+        <Redirect to='/not-found' />
+      </Switch>
+    )
+  }
+}
+
+export default AppRoutes;

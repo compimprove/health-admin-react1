@@ -133,7 +133,7 @@ class MealProgram extends Component {
           onFinishFailed={this.onFinishFailed}
         >
           <Form.Item
-            label={localized.get("foodName")}
+            label="Tên chế độ ăn"
             name="title"
             rules={[{ required: true, message: 'Hãy nhập tên bữa ăn' }]}
           >
