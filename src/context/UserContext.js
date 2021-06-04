@@ -94,7 +94,7 @@ export class UserProvider extends React.Component {
             window.location.pathname = "/user-management";
             break;
           case UserData.Role.Trainer:
-            window.location.pathname = "/trainee-overview";
+            window.location.pathname = "/trainer-home";
             break;
           case UserData.Role.User:
             window.location.pathname = "/stream-exercise/room";

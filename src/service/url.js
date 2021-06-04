@@ -4,6 +4,7 @@ const Url = {
   Login: host + "/auth/login",
   RefreshToken: host + "/auth/refresh-token",
   UserData: host + "/user",
+  UserRoomHistory: host + "/user/room-history",
   Room: host + "/room",
   UserInfoBySocketId: host + "/user/socketId",
   RoomInfo: host + "/room",

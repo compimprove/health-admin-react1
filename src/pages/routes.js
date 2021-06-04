@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import {Switch, Route, Redirect} from 'react-router-dom';
 import Home from './Home';
 import MealCreator from './MealCreator';
 import MealOverview from './MealOverview';
@@ -18,43 +18,59 @@ import {
 import UserData from '../models/User';
 import UserManagement from './UserManagement';
 import TrainerRegisterPage from './TrainerRegisterPage';
+import TrainerHomePage from './TrainerHomePage';
+import RoomHistory from "./RoomHistory";
 
 
 export const routes = [
   {
+    path: TrainerHomePage.routeName,
+    component: TrainerHomePage,
+    menuName: "Trang chủ",
+    icon: <UserOutlined/>,
+    role: [UserData.Role.Trainer]
+  },
+  {
     path: UserManagement.routeName,
     component: UserManagement,
     menuName: "Quản lý User",
-    icon: <UserOutlined />,
+    icon: <UserOutlined/>,
     role: [UserData.Role.Admin]
   },
   {
     path: Rooms.routeName,
     component: Rooms,
     menuName: "Phòng tập trực tuyến",
-    icon: <DesktopOutlined />,
+    icon: <DesktopOutlined/>,
     role: [UserData.Role.User, UserData.Role.Trainer]
+  },
+  {
+    path: RoomHistory.routeName,
+    component: RoomHistory,
+    menuName: "Lịch sử phòng tập",
+    icon: <UserOutlined/>,
+    role: [UserData.Role.Trainer, UserData.Role.User]
   },
   {
     path: MealOverview.routeName,
     component: MealOverview,
     menuName: "Quản lý dinh dưỡng",
-    icon: <DesktopOutlined />,
-    role: [UserData.Role.Trainer, UserData.Role.Admin]
+    icon: <DesktopOutlined/>,
+    role: [UserData.Role.Trainer]
   },
   {
     path: TraineeOverview.routeName,
     component: TraineeOverview,
     menuName: "Quản lý Học viên",
-    icon: <UserOutlined />,
+    icon: <UserOutlined/>,
     role: [UserData.Role.Trainer]
   },
   {
     path: TrainingOverview.routeName,
     component: TrainingOverview,
     menuName: "Quản lý các bài tập",
-    icon: <DesktopOutlined />,
-    role: [UserData.Role.Trainer, UserData.Role.Admin]
+    icon: <DesktopOutlined/>,
+    role: [UserData.Role.Trainer]
   },
   {
     path: TraineeManagement.routeName,
@@ -91,7 +107,7 @@ class AppRoutes extends React.Component {
   render() {
     return (
       <Switch>
-        {routes.map(({ path, exact = false, component: Component, ...rest }) => {
+        {routes.map(({path, exact = false, component: Component, ...rest}) => {
           return (
             <Route
               key={path}
@@ -102,7 +118,7 @@ class AppRoutes extends React.Component {
             />
           );
         })}
-        <Redirect to='/not-found' />
+        <Redirect to='/not-found'/>
       </Switch>
     )
   }

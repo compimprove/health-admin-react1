@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Modal, Button } from 'antd';
+import React, {useState} from 'react';
+import {Modal, Button} from 'antd';
 
-const Popup = ({ title, onOk, onCancel, btnStyle, btnContent, children }) => {
+const Popup = ({title, onOk, onCancel, btnStyle, btnContent, children}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -9,7 +9,7 @@ const Popup = ({ title, onOk, onCancel, btnStyle, btnContent, children }) => {
   };
 
   const handleOk = () => {
-    onOk();
+    if (onOk) onOk();
     setIsModalVisible(false);
   };
 
@@ -20,7 +20,7 @@ const Popup = ({ title, onOk, onCancel, btnStyle, btnContent, children }) => {
   };
   let okButtonProps = {};
   if (btnStyle && btnStyle.danger) {
-    okButtonProps = { danger: true };
+    okButtonProps = {danger: true};
   }
 
   return (
