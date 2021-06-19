@@ -156,7 +156,7 @@ function MealProgramComponent({ program, deleteMealProgram }) {
               <List.Item.Meta
                 avatar={<Avatar src={item.imageUrl} />}
                 title={<Link to={`${MealCreator.routeName}?mealId=${item.id}`}>{item.title}</Link>}
-                description={`Week: ${item.week}, Day: ${item.day}`}
+                description={`Tuần: ${item.week}, Ngày: ${item.day}`}
               />
             </List.Item>
           )}

@@ -9,6 +9,7 @@ import ExerciseStep from '../models/ExerciseStep';
 import MainLayout from '../component/MainLayout';
 import Url from '../service/url';
 
+
 const ExerciseType = {
   Rest: "rest",
   Warmup: "warmup",

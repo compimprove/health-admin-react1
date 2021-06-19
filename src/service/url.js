@@ -23,7 +23,7 @@ const Url = {
   AdminUserTrainer: host + "/admin/user-trainer",
   AdminUserTrainerRegister: host + "/admin/user-trainer-register",
   AdminChangeRole: host + "/admin/change-role",
-  MealImage: host + "/file/image",
+  ImageUpload: host + "/file/image",
   ExerciseVideo: host + "/file/video",
 };
 export default Url;

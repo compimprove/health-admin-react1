@@ -1,4 +1,4 @@
-import { Avatar, Button, Form, Input, InputNumber, message, Select, Space } from 'antd';
+import {Avatar, Button, Form, Input, InputNumber, message, Select, Space, Upload} from 'antd';
 import React, { Component } from 'react';
 import MainLayout from '../component/MainLayout';
 import { UserContext } from '../context/UserContext';
@@ -29,6 +29,7 @@ class MealProgram extends Component {
     let url = new URL(window.location.href);
     this.formRef = React.createRef();
     this.state = {
+      imageUrl: "",
       trainees: [],
       meals: [],
       mealProgram: {},
@@ -52,6 +53,7 @@ class MealProgram extends Component {
     })
     this.setState({
       mealProgram: response.data,
+      imageUrl: response.data.imageUrl
     });
     console.log("get meal program", response.data);
     this.formRef.current.setFieldsValue(response.data);
@@ -76,6 +78,7 @@ class MealProgram extends Component {
   }
 
   onFinish = (form) => {
+    form.imageUrl = this.state.imageUrl;
     if (this.state.mealProgramId != null) {
       form.id = this.state.mealProgramId
       this.editMealProgram(form)
@@ -83,6 +86,19 @@ class MealProgram extends Component {
       this.createMealProgram(form)
     }
   }
+
+  handleUploadImage = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({loading: true});
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      this.setState({
+        imageUrl: info.file.response.url
+      })
+    }
+  };
 
   editMealProgram = async (form) => {
     console.log("editMeal", form);
@@ -122,6 +138,7 @@ class MealProgram extends Component {
   }
 
   render() {
+    let imageUrl = this.state.imageUrl;
     return (
       <MainLayout>
         <Form
@@ -146,6 +163,29 @@ class MealProgram extends Component {
           >
             <Input.TextArea autoSize placeholder={localized.get("description")} />
           </Form.Item>
+
+          <Form.Item
+            name="imageUrl"
+            label={localized.get("mealImage")}
+            valuePropName="file"
+            extra=""
+          >
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              action={Url.ImageUpload}
+              onChange={this.handleUploadImage}
+            >
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{width: '100%'}}/> : <div>
+                <PlusOutlined/>
+                <div style={{marginTop: 8}}>Upload</div>
+              </div>}
+            </Upload>
+          </Form.Item>
+
+
           <Form.Item
             label="Bữa ăn"
           >
@@ -170,7 +210,7 @@ class MealProgram extends Component {
                       >
                         <Select
                           style={{ width: 250 }}
-                          placeholder="Choose A Meal"
+                          placeholder="Chọn bữa ăn"
                         >
                           {this.state.meals.map(meal => (
                             <Option key={meal._id}><Avatar style={{ marginRight: 10 }} src={meal.imageUrl} />{meal.title}</Option>
@@ -202,7 +242,7 @@ class MealProgram extends Component {
                   ))}
                   <Form.Item>
                     <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                      {localized.get("nutritionIngredient")}
+                      Thêm bữa ăn
                     </Button>
                   </Form.Item>
                 </>

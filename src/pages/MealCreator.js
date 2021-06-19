@@ -1,14 +1,15 @@
-import { Button, Col, Form, Input, InputNumber, Layout, Radio, Row, Space, Upload, Typography, message } from 'antd';
-import React, { Component } from 'react';
+import {Button, Col, Form, Input, InputNumber, Layout, Radio, Row, Space, Upload, Typography, message} from 'antd';
+import React, {Component} from 'react';
 import localized from '../service/localized';
-const { Header } = Layout;
-import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { LogUtils } from "../service/logUtils";
-import { UserContext } from '../context/UserContext';
+
+const {Header} = Layout;
+import {MinusCircleOutlined, PlusOutlined, UploadOutlined} from '@ant-design/icons';
+import {LogUtils} from "../service/logUtils";
+import {UserContext} from '../context/UserContext';
 import Url from '../service/url';
 import MealOverview from './MealOverview';
-const { Title } = Typography;
 
+const {Title} = Typography;
 
 
 class MealCreator extends React.Component {
@@ -20,24 +21,23 @@ class MealCreator extends React.Component {
   }
 
 
-
   render() {
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{minHeight: '100vh'}}>
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ color: "white" }}>Bữa ăn</Header>
-          <MealForm initData={this.props.initData} />
+          <Header className="site-layout-background" style={{color: "white"}}>Bữa ăn</Header>
+          <MealForm initData={this.props.initData}/>
         </Layout>
       </Layout>);
   }
 }
 
 const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 18 },
+  labelCol: {span: 6},
+  wrapperCol: {span: 18},
 };
 const tailLayout = {
-  wrapperCol: { offset: 6, span: 18 },
+  wrapperCol: {offset: 6, span: 18},
 };
 
 class MealForm extends React.Component {
@@ -62,9 +62,9 @@ class MealForm extends React.Component {
     } else {
       this.formRef.current.setFieldsValue({
         nutritions: [
-          { name: "protein", amount: 0 },
-          { name: "carbohydrates", amount: 0 },
-          { name: "fat", amount: 0 },
+          {name: "protein", amount: 0},
+          {name: "carbohydrates", amount: 0},
+          {name: "fat", amount: 0},
         ],
       })
     }
@@ -148,12 +148,12 @@ class MealForm extends React.Component {
     let field = this.formRef.current.getFieldValue(formField);
     field[index] = field[index] || {};
     field[index][key] = value;
-    this.formRef.current.setFieldsValue({ [formField]: field });
+    this.formRef.current.setFieldsValue({[formField]: field});
   }
 
   handleUploadImage = info => {
     if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
+      this.setState({loading: true});
       return;
     }
     if (info.file.status === 'done') {
@@ -172,7 +172,7 @@ class MealForm extends React.Component {
       <div>
         <Form
           ref={this.formRef}
-          style={{ width: 600, marginTop: 30 }}
+          style={{width: 600, marginTop: 30}}
           {...layout}
           name="mealForm"
           onFinish={this.onFinish}
@@ -181,16 +181,16 @@ class MealForm extends React.Component {
           <Form.Item
             label={localized.get("foodName")}
             name="title"
-            rules={[{ required: true, message: 'Please input the food name!' }]}
+            rules={[{required: true, message: 'Please input the food name!'}]}
           >
-            <Input />
+            <Input/>
           </Form.Item>
 
           <Form.Item
             label={localized.get("description")}
             name="description"
           >
-            <Input.TextArea autoSize placeholder={localized.get("description")} />
+            <Input.TextArea autoSize placeholder={localized.get("description")}/>
           </Form.Item>
 
           <Form.Item
@@ -204,12 +204,12 @@ class MealForm extends React.Component {
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
-              action={Url.MealImage}
+              action={Url.ImageUpload}
               onChange={this.handleUploadImage}
             >
-              {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : <div>
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{width: '100%'}}/> : <div>
+                <PlusOutlined/>
+                <div style={{marginTop: 8}}>Upload</div>
               </div>}
             </Upload>
           </Form.Item>
@@ -217,24 +217,26 @@ class MealForm extends React.Component {
           <Form.Item
             label={localized.get("prepTime")}
             name="prepTime"
-            rules={[{ required: true, message: 'Please input the type!' }]}
+            rules={[{required: true, message: 'Please input the type!'}]}
           >
             {this.state.mealId != null && prepTime != null &&
-              <InputNumber defaultValue={prepTime} onChange={value => this.formRef.current.setFieldsValue({ prepTime: value })} />}
+            <InputNumber defaultValue={prepTime}
+                         onChange={value => this.formRef.current.setFieldsValue({prepTime: value})}/>}
             {this.state.mealId == null &&
-              <InputNumber defaultValue={0} onChange={value => this.formRef.current.setFieldsValue({ prepTime: value })} />}
+            <InputNumber defaultValue={0} onChange={value => this.formRef.current.setFieldsValue({prepTime: value})}/>}
             <span className="ant-form-text">{" " + localized.get("minute")}</span>
           </Form.Item>
 
           <Form.Item
             label={localized.get("cookTime")}
             name="cookTime"
-            rules={[{ required: true, message: 'Please input the type!' }]}
+            rules={[{required: true, message: 'Please input the type!'}]}
           >
             {this.state.mealId != null && cookTime != null &&
-              <InputNumber defaultValue={cookTime} onChange={value => this.formRef.current.setFieldsValue({ cookTime: value })} />}
+            <InputNumber defaultValue={cookTime}
+                         onChange={value => this.formRef.current.setFieldsValue({cookTime: value})}/>}
             {this.state.mealId == null &&
-              <InputNumber defaultValue={0} onChange={value => this.formRef.current.setFieldsValue({ cookTime: value })} />}
+            <InputNumber defaultValue={0} onChange={value => this.formRef.current.setFieldsValue({cookTime: value})}/>}
             <span className="ant-form-text">{" " + localized.get("minute")}</span>
           </Form.Item>
 
@@ -287,34 +289,34 @@ class MealForm extends React.Component {
             <Form.List
               name="nutritions"
             >
-              {(fields, { add, remove }) => (
+              {(fields, {add, remove}) => (
                 <>
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <Space key={key} style={{ display: 'flex' }} align="baseline">
+                  {fields.map(({key, name, fieldKey, ...restField}) => (
+                    <Space key={key} style={{display: 'flex'}} align="baseline">
                       <Form.Item
                         {...restField}
                         name={[name, 'name']}
                         fieldKey={[fieldKey, 'name']}
-                        rules={[{ required: true, message: 'Missing name' }]}
+                        rules={[{required: true, message: 'Missing name'}]}
                       >
-                        <Input placeholder={localized.get("nutritionIngredient")} />
+                        <Input placeholder={localized.get("nutritionIngredient")}/>
                       </Form.Item>
                       <Form.Item
                         {...restField}
                         name={[name, 'amount']}
                         fieldKey={[fieldKey, 'amount']}
-                        rules={[{ required: true, message: 'Missing last name' }]}
+                        rules={[{required: true, message: 'Missing last name'}]}
                       >
                         <InputNumber placeholder={localized.get("amount")} onChange={value => {
                           this.changeFormValueByIndex("nutritions", key, "amount", value)
-                        }} />
+                        }}/>
                       </Form.Item>
                       mg
-                      <MinusCircleOutlined onClick={() => remove(name)} />
+                      <MinusCircleOutlined onClick={() => remove(name)}/>
                     </Space>
                   ))}
                   <Form.Item>
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
                       {localized.get("nutritionIngredient")}
                     </Button>
                   </Form.Item>
@@ -331,18 +333,18 @@ class MealForm extends React.Component {
             <Form.List
               name="ingredients"
             >
-              {(fields, { add, remove }) => (
+              {(fields, {add, remove}) => (
                 <>
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <Space key={key} style={{ display: 'flex' }} align="baseline">
+                  {fields.map(({key, name, fieldKey, ...restField}) => (
+                    <Space key={key} style={{display: 'flex'}} align="baseline">
                       <Form.Item
                         {...restField}
-                        style={{ width: 450, }}
+                        style={{width: 450,}}
                         name={[name, 'name']}
                         fieldKey={[fieldKey, 'name']}
-                        rules={[{ required: true, message: 'Missing name' }]}
+                        rules={[{required: true, message: 'Missing name'}]}
                       >
-                        <Input.TextArea autoSize placeholder={localized.get("ingredientName")} />
+                        <Input.TextArea autoSize placeholder={localized.get("ingredientName")}/>
                       </Form.Item>
                       {/* <Form.Item
                         {...restField}
@@ -354,11 +356,11 @@ class MealForm extends React.Component {
                           this.changeFormValueByIndex("ingredients", key, "amount", value)
                         }} />
                       </Form.Item> */}
-                      <MinusCircleOutlined onClick={() => remove(name)} />
+                      <MinusCircleOutlined onClick={() => remove(name)}/>
                     </Space>
                   ))}
                   <Form.Item>
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
                       {localized.get("ingredient")}
                     </Button>
                   </Form.Item>
@@ -373,24 +375,24 @@ class MealForm extends React.Component {
             <Form.List
               name="directions"
             >
-              {(fields, { add, remove }) => (
+              {(fields, {add, remove}) => (
                 <>
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <Space key={key} style={{ display: 'flex', justifyContent: "space-between" }} align="baseline">
+                  {fields.map(({key, name, fieldKey, ...restField}) => (
+                    <Space key={key} style={{display: 'flex', justifyContent: "space-between"}} align="baseline">
                       <Form.Item
                         {...restField}
                         name={[name, 'name']}
                         fieldKey={[fieldKey, 'name']}
-                        style={{ width: 450, }}
-                        rules={[{ required: true, message: localized.get("missingDirection") }]}
+                        style={{width: 450,}}
+                        rules={[{required: true, message: localized.get("missingDirection")}]}
                       >
-                        <Input.TextArea autoSize placeholder={localized.get("direction")} />
+                        <Input.TextArea autoSize placeholder={localized.get("direction")}/>
                       </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
+                      <MinusCircleOutlined onClick={() => remove(name)}/>
                     </Space>
                   ))}
                   <Form.Item>
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
                       {localized.get("direction")}
                     </Button>
                   </Form.Item>
@@ -402,7 +404,7 @@ class MealForm extends React.Component {
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
               Submit
-        </Button>
+            </Button>
           </Form.Item>
         </Form>
       </div>

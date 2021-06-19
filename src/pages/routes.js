@@ -20,9 +20,17 @@ import UserManagement from './UserManagement';
 import TrainerRegisterPage from './TrainerRegisterPage';
 import TrainerHomePage from './TrainerHomePage';
 import RoomHistory from "./RoomHistory";
+import AdminHomePage from "./AdminHomePage";
 
 
 export const routes = [
+  // {
+  //   path: AdminHomePage.routeName,
+  //   component: AdminHomePage,
+  //   menuName: "Trang chủ",
+  //   icon: <UserOutlined/>,
+  //   role: [UserData.Role.Admin]
+  // },
   {
     path: TrainerHomePage.routeName,
     component: TrainerHomePage,

@@ -10,7 +10,7 @@ const Utils = {
       return `${Math.floor(seconds / 60)} phút ` + (seconds % 60 !== 0 ? `${seconds % 60} giây` : "");
     } else {
       let minutes = Math.floor(seconds / 60);
-      return `${minutes / 60} giờ ${minutes % 60} phút`;
+      return `${Math.floor(minutes / 60)} giờ ${minutes % 60} phút`;
     }
   },
   getDateTimeString(timeString) {

@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import MainLayout from "../component/MainLayout";
 import {UserContext} from "../context/UserContext";
 import Url from "../service/url";
-import {Avatar, Button, Col, Divider, Drawer, List, Row, Tooltip} from "antd";
+import {Avatar, Button, Card, Col, Divider, Drawer, List, Row, Tooltip} from "antd";
 import Title from "antd/es/typography/Title";
 import {LoadingOutlined, UserOutlined, AntDesignOutlined} from "@ant-design/icons";
 import Popup from "../component/Popup";
+import moment from "moment";
 
 class RoomHistory extends Component {
   static routeName = "/room-history";
@@ -64,8 +65,7 @@ class RoomHistory extends Component {
   }
 
   getDateTimeString(milliseconds) {
-    let date = new Date(milliseconds);
-    return `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth() + 1}`
+    return moment(milliseconds).format("h:mm a, DD/M")
   }
 
   onCloseDrawer = () => {
@@ -98,37 +98,54 @@ class RoomHistory extends Component {
     return (
       <MainLayout title="Lịch sử phòng tập">
         <div style={{margin: "20px 50px"}}>
+          {/*{this.context.userData.isTrainer() && <div>*/}
+          {/*  <Title level={4}>Tổng số phòng từng tham gia: {}</Title>*/}
+          {/*</div>}*/}
           <Row gutter={[20, 20]}>
-            <Col span={12}>
-              <List
-                itemLayout="horizontal"
-                dataSource={this.state.roomHistories}
-                pagination={{
-                  pageSize: 7,
-                }}
-                renderItem={item => {
-                  return (
-                    <List.Item
-                      extra={<Popup
-                        btnStyle={{type: "primary", danger: true}}
-                        btnContent="Xóa"
-                        onOk={this.deleteRoomHistory.bind(this, item._id)}
-                        title="Bạn thực sự muốn xóa"
-                      ><p>{item.name}</p></Popup>}
-                    >
-                      <List.Item.Meta
-                        // avatar={<Avatar src={item.name}/>}
-                        title={<a onClick={() => {
-                          this.openDrawer(item._id)
-                        }}>{item.name}</a>}
-                        description={`Lớp học kết thúc vào ${this.getDateTimeString(item.created)}`}
-
-                      />
-                    </List.Item>)
-                }}
-              />
+            <Col span={13}>
+              <Card title={`Danh sách lịch sử phòng: ${this.state.roomHistories.length}`}>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={this.state.roomHistories}
+                  pagination={{
+                    pageSize: 7,
+                  }}
+                  renderItem={item => {
+                    let avatar = <div style={{display: 'flex', flexDirection: 'column', alignItems: "center"}}>
+                      <Avatar size="large"
+                              style={{
+                                backgroundColor: '#5bac07',
+                                marginBottom: "5px"
+                              }}>{moment(item.started).format("DD/M")}</Avatar>
+                      {this.context.userData.isTrainer() && <span>{item.participants.length} <UserOutlined/></span>}
+                    </div>
+                    return (
+                      <List.Item
+                        extra={<Popup
+                          btnStyle={{type: "primary", danger: true}}
+                          btnContent="Xóa"
+                          onOk={this.deleteRoomHistory.bind(this, item._id)}
+                          title="Bạn thực sự muốn xóa"
+                        ><p>{item.name}</p></Popup>}
+                      >
+                        <List.Item.Meta
+                          avatar={avatar}
+                          title={<a onClick={() => {
+                            this.openDrawer(item._id)
+                          }}>{item.name}</a>}
+                          description={<div style={{display: 'flex', flexDirection: 'column'}}>
+                            <span>Bắt đầu vào {`${this.getDateTimeString(item.started)}`}</span>
+                            <span>Kết thúc vào {`${this.getDateTimeString(item.created)}`}</span>
+                          </div>}
+                        />
+                      </List.Item>)
+                  }}
+                />
+              </Card>
             </Col>
           </Row>
+
+
         </div>
         <RoomHistoryDrawer
           onClose={this.onCloseDrawer}

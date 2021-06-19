@@ -12,6 +12,8 @@ const localized = {
     } else return lang[key];
   },
   vi: {
+    week: "Tuần",
+    day: "Ngày",
     foodName: "Tên món ăn",
     description: "Mô tả",
     prepTime: "Thời gian chuẩn bị",

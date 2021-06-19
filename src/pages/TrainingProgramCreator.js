@@ -1,4 +1,4 @@
-import { Avatar, Button, Form, Input, InputNumber, message, Select, Space } from 'antd';
+import {Avatar, Button, Form, Input, InputNumber, message, Select, Space, Upload} from 'antd';
 import React, { Component } from 'react';
 import MainLayout from '../component/MainLayout';
 import { UserContext } from '../context/UserContext';
@@ -27,6 +27,7 @@ class TrainingProgramCreator extends Component {
     let url = new URL(window.location.href);
     this.formRef = React.createRef();
     this.state = {
+      imageUrl: "",
       trainees: [],
       exercises: [],
       trainingProgram: {},
@@ -49,6 +50,7 @@ class TrainingProgramCreator extends Component {
     })
     this.setState({
       trainingProgram: response.data,
+      imageUrl: response.data.imageUrl
     });
     console.log("get training program", response.data);
     this.formRef.current.setFieldsValue(response.data);
@@ -77,6 +79,7 @@ class TrainingProgramCreator extends Component {
   }
 
   onFinish = (form) => {
+    form.imageUrl = this.state.imageUrl;
     if (this.state.trainingId != null) {
       form.id = this.state.trainingId
       this.editTrainingProgram(form)
@@ -95,7 +98,7 @@ class TrainingProgramCreator extends Component {
     message.success("Sửa thành công")
     await this.initTrainingProgramData();
   }
- 
+
   createTrainingProgram = async (form) => {
     console.log("createTrainingProgram", form);
     let response = await this.context.axios({
@@ -116,6 +119,19 @@ class TrainingProgramCreator extends Component {
 
   }
 
+  handleUploadImage = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({loading: true});
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      this.setState({
+        imageUrl: info.file.response.url
+      })
+    }
+  };
+
   changeFormValueByIndex = (formField, index, key, value) => {
     let field = this.formRef.current.getFieldValue(formField);
     field[index] = field[index] || {};
@@ -124,6 +140,7 @@ class TrainingProgramCreator extends Component {
   }
 
   render() {
+    let imageUrl = this.state.imageUrl;
     return (
       <MainLayout>
         {/* <Button onClick={this.clearTrainingState}>Tạo bài tập mới từ bài này</Button> */}
@@ -149,6 +166,28 @@ class TrainingProgramCreator extends Component {
           >
             <Input.TextArea autoSize placeholder={localized.get("description")} />
           </Form.Item>
+
+          <Form.Item
+            name="imageUrl"
+            label={localized.get("mealImage")}
+            valuePropName="file"
+            extra=""
+          >
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              action={Url.ImageUpload}
+              onChange={this.handleUploadImage}
+            >
+              {imageUrl ? <img src={imageUrl} alt="avatar" style={{width: '100%'}}/> : <div>
+                <PlusOutlined/>
+                <div style={{marginTop: 8}}>Upload</div>
+              </div>}
+            </Upload>
+          </Form.Item>
+
           <Form.Item
             label="Danh sách bài tập"
           >

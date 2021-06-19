@@ -206,7 +206,7 @@ function TrainingProgramComponent({ program, deleteTrainingProgram }) {
                     id: item._id
                   })}>{item.title}</Link>
                 }
-                description={`Week: ${item.week}, Day: ${item.day}`}
+                description={`Tuần: ${item.week}, Ngày: ${item.day}`}
               />
             </List.Item>
           )}

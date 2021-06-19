@@ -1,4 +1,4 @@
-import {Avatar, Badge, Button, Calendar, Col, Divider, Drawer, List, message, Row, Table, Typography} from 'antd';
+import {Avatar, Badge, Button, Calendar, Card, Col, Divider, Drawer, List, message, Row, Table, Typography} from 'antd';
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import MainLayout from '../component/MainLayout';
@@ -10,6 +10,7 @@ import MealProgram from './MealProgram';
 import TraineeManagement from './TraineeManagement';
 import TrainingProgramCreator from './TrainingProgramCreator';
 import moment from "moment";
+import {CheckOutlined, MinusOutlined} from "@ant-design/icons";
 
 const {Title} = Typography;
 
@@ -77,7 +78,7 @@ class TraineeOverview extends Component {
     this.setState({showDrawer: true});
   }
 
-  getTraineeData = async (traineeId) => {
+  async getTraineeData(traineeId) {
     if (this.state.traineeData != null && this.state.traineeData._id == traineeId) {
       return;
     }
@@ -88,6 +89,24 @@ class TraineeOverview extends Component {
     this.setState({traineeData: response.data});
   }
 
+  async deleteTrainee(traineeId) {
+    let url = Url.TrainerTrainee + "/" + traineeId;
+    let response = await this.context.axios({
+      method: "DELETE",
+      url: url
+    });
+    this.getCurrentTrainee();
+  }
+
+  deleteRegisteredTrainee = async (traineeId) => {
+    let url = Url.TrainerRegisteredTrainee + "/" + traineeId;
+    let response = await this.context.axios({
+      method: "DELETE",
+      url: url
+    });
+    this.getRegisteredTrainee();
+  }
+
   getDateTimeString(milliseconds) {
     let date = new Date(milliseconds);
     return `${date.getHours()}:${date.getMinutes()} ${date.getDate()} / ${date.getMonth() + 1}`
@@ -96,56 +115,84 @@ class TraineeOverview extends Component {
   render() {
     return (
       <MainLayout title="Quản lý học viên">
-        <Row gutter={[100, 50]} style={{marginLeft: "30px", marginRight: "30px", paddingTop: "30px"}}>
+        <Row gutter={[20, 50]} style={{marginLeft: "30px", marginRight: "30px", paddingTop: "30px"}}>
           <Col span={12}>
-            <Title level={3}>Học viên đang theo học</Title>
-            <List
-              itemLayout="horizontal"
-              dataSource={this.state.currentTrainee}
-              pagination={{
-                pageSize: 7,
-              }}
-              renderItem={item => {
-
-                return (
-                  <List.Item
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.avatar}/>}
-                      title={<a onClick={this.showTraineeDrawer.bind(this, item._id)}>{item.name}</a>}
-                      description={`Tham gia từ ${this.getDateTimeString(item.created)}`}
-                    />
-                  </List.Item>)
-              }}
-            />
+            <Card title="Học viên đang theo học">
+              <List
+                itemLayout="horizontal"
+                dataSource={this.state.currentTrainee}
+                pagination={{
+                  pageSize: 7,
+                }}
+                renderItem={item => {
+                  return (
+                    <List.Item
+                      extra={
+                        <Popup
+                          btnStyle={{
+                            type: "primary", danger: true, icon: < MinusOutlined/>, shape: "circle"
+                          }}
+                          onOk={this.deleteTrainee.bind(this, item._id)}
+                          title="Bạn thực sự muốn xóa học viên">
+                          <Avatar src={item.avatar}/>
+                          <span style={{marginLeft: "20px"}}>{item.name}</span>
+                        </Popup>
+                      }
+                    >
+                      <List.Item.Meta
+                        avatar={<Avatar src={item.avatar}/>}
+                        title={<a onClick={this.showTraineeDrawer.bind(this, item._id)}>{item.name}</a>}
+                        description={`Tham gia từ ${this.getDateTimeString(item.created)}`}
+                      />
+                    </List.Item>)
+                }}
+              />
+            </Card>
           </Col>
           <Col span={12}>
-            <Title level={3}>Học viên đăng ký</Title>
-            <List
-              itemLayout="horizontal"
-              dataSource={this.state.registeredTrainee}
-              pagination={{
-                pageSize: 7,
-              }}
-              renderItem={item => {
-                return (
-                  <List.Item
-                    extra={<Popup
-                      btnContent="Chấp nhận"
-                      onOk={this.acceptRegisteredTrainee.bind(this, item._id)}
-                      title="Bạn thực sự muốn thêm học viên">
-                      <Avatar src={item.avatar}/>
-                      <span style={{marginLeft: "20px"}}>{item.name}</span>
-                    </Popup>}
-                  >
-                    <List.Item.Meta
-                      avatar={<Avatar src={item.avatar}/>}
-                      title={<a onClick={this.showTraineeDrawer.bind(this, item._id)}>{item.name}</a>}
-                      description={`Đăng ký vào ${this.getDateTimeString(item.created)}`}
-                    />
-                  </List.Item>)
-              }}
-            />
+            <Card title="Học viên đăng ký">
+              <List
+                itemLayout="horizontal"
+                dataSource={this.state.registeredTrainee}
+                pagination={{
+                  pageSize: 7,
+                }}
+                renderItem={item => {
+                  return (
+                    <List.Item
+                      extra={<>
+                        <Popup
+                          btnStyle={{
+                            style: {
+                              marginRight: "8px"
+                            },
+                            type: "primary", icon: < CheckOutlined/>, shape: "circle"
+                          }}
+                          onOk={this.acceptRegisteredTrainee.bind(this, item._id)}
+                          title="Bạn thực sự muốn thêm học viên">
+                          <Avatar src={item.avatar}/>
+                          <span style={{marginLeft: "20px"}}>{item.name}</span>
+                        </Popup>
+                        <Popup
+                          btnStyle={{
+                            type: "primary", danger: true, icon: < MinusOutlined/>, shape: "circle"
+                          }}
+                          onOk={this.deleteRegisteredTrainee.bind(this, item._id)}
+                          title="Bạn thực sự muốn xóa đăng ký của học viên">
+                          <Avatar src={item.avatar}/>
+                          <span style={{marginLeft: "20px"}}>{item.name}</span>
+                        </Popup>
+                      </>}
+                    >
+                      <List.Item.Meta
+                        avatar={<Avatar src={item.avatar}/>}
+                        title={<a onClick={this.showTraineeDrawer.bind(this, item._id)}>{item.name}</a>}
+                        description={`Đăng ký vào ${this.getDateTimeString(item.created)}`}
+                      />
+                    </List.Item>)
+                }}
+              />
+            </Card>
           </Col>
         </Row>
         <TraineeDrawer
