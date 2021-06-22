@@ -11,6 +11,7 @@ import TraineeManagement from './TraineeManagement';
 import TrainingProgramCreator from './TrainingProgramCreator';
 import moment from "moment";
 import {CheckOutlined, MinusOutlined} from "@ant-design/icons";
+import UserAvatar from "../component/UserAvatar";
 
 const {Title} = Typography;
 
@@ -140,7 +141,7 @@ class TraineeOverview extends Component {
                       }
                     >
                       <List.Item.Meta
-                        avatar={<Avatar src={item.avatar}/>}
+                        avatar={<UserAvatar imageUrl={item.avatar} name={item.name}/>}
                         title={<a onClick={this.showTraineeDrawer.bind(this, item._id)}>{item.name}</a>}
                         description={`Tham gia từ ${this.getDateTimeString(item.created)}`}
                       />
@@ -170,7 +171,7 @@ class TraineeOverview extends Component {
                           }}
                           onOk={this.acceptRegisteredTrainee.bind(this, item._id)}
                           title="Bạn thực sự muốn thêm học viên">
-                          <Avatar src={item.avatar}/>
+                          <UserAvatar imageUrl={item.avatar} name={item.name}/>
                           <span style={{marginLeft: "20px"}}>{item.name}</span>
                         </Popup>
                         <Popup
@@ -179,13 +180,13 @@ class TraineeOverview extends Component {
                           }}
                           onOk={this.deleteRegisteredTrainee.bind(this, item._id)}
                           title="Bạn thực sự muốn xóa đăng ký của học viên">
-                          <Avatar src={item.avatar}/>
+                          <UserAvatar imageUrl={item.avatar} name={item.name}/>
                           <span style={{marginLeft: "20px"}}>{item.name}</span>
                         </Popup>
                       </>}
                     >
                       <List.Item.Meta
-                        avatar={<Avatar src={item.avatar}/>}
+                        avatar={<UserAvatar imageUrl={item.avatar} name={item.name}/>}
                         title={<a onClick={this.showTraineeDrawer.bind(this, item._id)}>{item.name}</a>}
                         description={`Đăng ký vào ${this.getDateTimeString(item.created)}`}
                       />
@@ -239,7 +240,8 @@ function TraineeDrawer({onClose, visible, userData}) {
     onClose={onClose}
     visible={visible}
   >
-    <p><Avatar size={70} src={userData.avatar} style={{marginRight: "10px"}}/> {userData.name}</p>
+    <p><UserAvatar size={70} style={{marginRight: "10px"}} imageUrl={userData.avatar}
+                   name={userData.name}/>{userData.name}</p>
     <Divider/>
     <p className="site-description-item-profile-p">Thông tin cá nhân</p>
     <Row>

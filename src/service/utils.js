@@ -23,6 +23,17 @@ const Utils = {
       return numberString;
     }
     return new Array(fixed - numberString.length).fill("0").join() + numberString;
+  },
+  getShortName(name) {
+    let splitName = name.split(" ");
+    switch (splitName.length) {
+      case 1:
+        return splitName[0].slice(0,1);
+      case 2:
+        return splitName[0].slice(0,1) + splitName[1].slice(0,1);
+      case 3:
+        return splitName[1].slice(0,1) + splitName[2].slice(0,1);
+    }
   }
 }
 

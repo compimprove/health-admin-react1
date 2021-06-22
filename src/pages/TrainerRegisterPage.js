@@ -13,7 +13,7 @@ import {
   DatePicker,
   Collapse,
   Typography,
-  message
+  message, Upload
 } from 'antd';
 import 'antd/dist/antd.css';
 import MainLayout from '../component/MainLayout';
@@ -21,6 +21,8 @@ import { Link } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import axios from 'axios';
 import Url from '../service/url';
+import localized from "../service/localized";
+import {PlusOutlined} from "@ant-design/icons";
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
 
@@ -45,6 +47,14 @@ class TrainerRegisterPage extends React.Component {
   static routeName = "/trainer-register";
   formRef = React.createRef();
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageUrl: ""
+    }
+  }
+
+
   componentDidMount() {
     if (process.env.REACT_APP_IS_DEVELOPMENT == "true") {
       this.formRef.current.setFieldsValue({
@@ -62,6 +72,7 @@ class TrainerRegisterPage extends React.Component {
 
   onFinish = async (form) => {
     form.birthDayTime = form.birthday.valueOf();
+    form.avatar = this.state.imageUrl;
     console.log(form);
     try {
       let res = await axios.post(Url.UserRegister, form);
@@ -78,7 +89,21 @@ class TrainerRegisterPage extends React.Component {
     }
   }
 
+  handleUploadImage = info => {
+    if (info.file.status === 'uploading') {
+      this.setState({loading: true});
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      this.setState({
+        imageUrl: info.file.response.url
+      })
+    }
+  };
+
   render() {
+    let imageUrl = this.state.imageUrl;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Layout className="site-layout">
@@ -106,6 +131,27 @@ class TrainerRegisterPage extends React.Component {
                     ]}
                   >
                     <Input />
+                  </Form.Item>
+
+                  <Form.Item
+                    name="imageUrl"
+                    label="Ảnh"
+                    valuePropName="file"
+                    extra=""
+                  >
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      action={Url.ImageUpload}
+                      onChange={this.handleUploadImage}
+                    >
+                      {imageUrl ? <img src={imageUrl} alt="avatar" style={{width: '100%'}}/> : <div>
+                        <PlusOutlined/>
+                        <div style={{marginTop: 8}}>Upload</div>
+                      </div>}
+                    </Upload>
                   </Form.Item>
 
                   <Form.Item

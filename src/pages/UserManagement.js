@@ -1,14 +1,15 @@
-import { Avatar, Button, Col, Divider, Drawer, List, Row } from 'antd';
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import {Avatar, Button, Col, Divider, Drawer, List, Row} from 'antd';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import MainLayout from '../component/MainLayout';
-import { UserContext } from '../context/UserContext';
+import {UserContext} from '../context/UserContext';
 import UserData from '../models/User';
 import Url from '../service/url';
 import Utils from '../service/utils';
-import { MinusCircleOutlined, PlusOutlined, SaveOutlined, CheckOutlined, MinusOutlined } from '@ant-design/icons';
+import {MinusCircleOutlined, PlusOutlined, SaveOutlined, CheckOutlined, MinusOutlined} from '@ant-design/icons';
 import Popup from '../component/Popup';
 import RoleManagement from '../component/RoleManagement';
+import UserAvatar from "../component/UserAvatar";
 
 
 class UserManagement extends Component {
@@ -39,12 +40,12 @@ class UserManagement extends Component {
     users.sort((user1, user2) => {
       return roles.indexOf(user1.role) - roles.indexOf(user2.role);
     })
-    this.setState({ users });
+    this.setState({users});
   }
 
   async onOpenUserDrawer(userId) {
     let url = Url.AdminUser + '/' + userId;
-    let res = await this.context.axios({ url });
+    let res = await this.context.axios({url});
     this.setState({
       userData: res.data,
       showUserDrawer: true
@@ -53,7 +54,7 @@ class UserManagement extends Component {
 
   async onOpenTrainerDrawer(trainerId) {
     let url = Url.AdminTrainer + '/' + trainerId;
-    let res = await this.context.axios({ url });
+    let res = await this.context.axios({url});
     this.setState({
       trainerData: res.data,
       showTrainerDrawer: true
@@ -61,11 +62,11 @@ class UserManagement extends Component {
   }
 
   onCloseUserDrawer = () => {
-    this.setState({ showUserDrawer: false });
+    this.setState({showUserDrawer: false});
   }
 
   onCloseTrainerDrawer = () => {
-    this.setState({ showTrainerDrawer: false });
+    this.setState({showTrainerDrawer: false});
   }
 
   async acceptRegister(trainerId, userId) {
@@ -73,10 +74,10 @@ class UserManagement extends Component {
     await this.context.axios({
       method: 'POST',
       url: Url.AdminUserTrainerRegister,
-      data: { trainerId, userId }
+      data: {trainerId, userId}
     });
     let url = Url.AdminTrainer + '/' + trainerId;
-    let res = await this.context.axios({ url });
+    let res = await this.context.axios({url});
     this.setState({
       trainerData: res.data
     });
@@ -86,10 +87,10 @@ class UserManagement extends Component {
     await this.context.axios({
       method: 'DELETE',
       url: Url.AdminUserTrainer,
-      data: { trainerId, userId }
+      data: {trainerId, userId}
     });
     let url = Url.AdminTrainer + '/' + trainerId;
-    let res = await this.context.axios({ url });
+    let res = await this.context.axios({url});
     this.setState({
       trainerData: res.data
     });
@@ -100,10 +101,10 @@ class UserManagement extends Component {
     await this.context.axios({
       method: 'DELETE',
       url: Url.AdminUserTrainerRegister,
-      data: { trainerId, userId }
+      data: {trainerId, userId}
     });
     let url = Url.AdminTrainer + '/' + trainerId;
-    let res = await this.context.axios({ url });
+    let res = await this.context.axios({url});
     this.setState({
       trainerData: res.data
     });
@@ -120,7 +121,7 @@ class UserManagement extends Component {
   render() {
     return (
       <MainLayout title="Quản lý người dùng">
-        <Row gutter={[70, 50]} style={{ marginLeft: "10px", marginRight: "10px", paddingTop: "30px" }}>
+        <Row gutter={[70, 50]} style={{marginLeft: "10px", marginRight: "10px", paddingTop: "30px"}}>
           <Col span={12}>
             <List
               itemLayout="horizontal"
@@ -139,15 +140,15 @@ class UserManagement extends Component {
                   extra={<Popup
                     title="Xóa User"
                     btnStyle={{
-                      type: "primary", danger: true, icon: < MinusOutlined />, shape: "circle"
+                      type: "primary", danger: true, icon: < MinusOutlined/>, shape: "circle"
                     }}
                     onOk={this.deleteUser.bind(this, item._id)}
                   >
                     <div>{`Bạn chắc chắn muốn xóa user ${item.name}`}</div>
-                  </Popup>} >
+                  </Popup>}>
 
                   <List.Item.Meta
-                    avatar={<Avatar src={item.avatar} />}
+                    avatar={<UserAvatar size={35} imageUrl={item.avatar} name={item.name}></UserAvatar>}
                     title={title}
                     description={`Tham gia vào ${Utils.getDateTimeString(item.created)}`}
                   />
@@ -178,7 +179,7 @@ class UserManagement extends Component {
 }
 
 
-function UserDrawer({ getUsersData, onClose, visible, userData }) {
+function UserDrawer({getUsersData, onClose, visible, userData}) {
   let height, weight, joiningDate;
   if (userData != null) {
     height = userData.height / 100;
@@ -193,88 +194,100 @@ function UserDrawer({ getUsersData, onClose, visible, userData }) {
     visible={visible}
   >
     {userData != null &&
-      <>
-        <Row>
-          <Col span={12}>
-            <p><Avatar size={70} src={userData.avatar} style={{ marginRight: "10px" }} /> {userData.name}</p>
-          </Col>
-          <Col span={12} style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <RoleManagement getUsersData={getUsersData} userData={userData} />
-          </Col>
-        </Row>
-        <Divider />
-        <p className="site-description-item-profile-p">Thông tin cá nhân</p>
-        <Row>
-          <Col span={12}>
-            <DescriptionItem title="Họ tên" content={userData.name} />
-          </Col>
-          <Col span={12}>
-            <DescriptionItem title="Cân nặng" content={`${weight} kg`} />
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <DescriptionItem title="Email" content={`${userData.email}`} />
-          </Col>
-          <Col span={12}>
-            <DescriptionItem title="Chiều cao" content={`${height} m`} />
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <DescriptionItem title="Ngày tham gia" content={`${joiningDate.getDate()} /${joiningDate.getMonth() + 1}/${joiningDate.getFullYear()}`} />
-          </Col>
-          <Col span={12}>
-            <DescriptionItem title="BMI" content={(weight / (height * height)).toFixed(2)} />
-          </Col>
-        </Row>
-        <Divider />
-        <Row>
-          <Col span={12}>
-            <p className="site-description-item-profile-p">Chương trình tập luyện tham gia:</p>
-            <ol style={{ paddingInlineStart: "20px" }}>
-              {userData.trainingPrograms && userData.trainingPrograms.map((training => (
-                <li style={{ marginBottom: "5px" }}>
-                  {training.title}
-                </li>
-              )))}
-            </ol>
-          </Col>
-          <Col span={12}>
-            <p className="site-description-item-profile-p">Chương trình dinh dưỡng tham gia:</p>
-            <ol style={{ paddingInlineStart: "20px" }}>
-              {userData.mealPrograms && userData.mealPrograms.map((mealProgram => (
-                <li key={mealProgram._id} style={{ marginBottom: "5px" }}>
-                  {mealProgram.title}
-                </li>
-              )))}
-            </ol>
-          </Col>
-        </Row>
-        <Divider />
-        <p className="site-description-item-profile-p">Lịch sử tập luyện</p>
-        <List
-          style={{ marginLeft: "10px" }}
-          itemLayout="horizontal"
-          dataSource={userData.exerciseHistory}
-          renderItem={item => {
-            let time = new Date(item.time);
-            let trainingLength = item.duration;
-            return (
-              <List.Item key={item._id} >
-                <List.Item.Meta
-                  avatar={<Avatar size={35} style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>{`${time.getDay()} / ${time.getMonth() + 1}`}</Avatar>}
-                  title={<span>{item.title}</span>}
-                  description={`${Utils.timeToString(trainingLength)}`}
-                />
-              </List.Item>)
-          }} />
-      </>
+    <>
+      <Row>
+        <Col span={12}>
+          <p><Avatar size={70} src={userData.avatar} style={{marginRight: "10px"}}/> {userData.name}</p>
+        </Col>
+        <Col span={12} style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+          <RoleManagement getUsersData={getUsersData} userData={userData}/>
+        </Col>
+      </Row>
+      <Divider/>
+      <p className="site-description-item-profile-p">Thông tin cá nhân</p>
+      <Row>
+        <Col span={12}>
+          <DescriptionItem title="Họ tên" content={userData.name}/>
+        </Col>
+        <Col span={12}>
+          <DescriptionItem title="Cân nặng" content={`${weight} kg`}/>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <DescriptionItem title="Email" content={`${userData.email}`}/>
+        </Col>
+        <Col span={12}>
+          <DescriptionItem title="Chiều cao" content={`${height} m`}/>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <DescriptionItem title="Ngày tham gia"
+                           content={`${joiningDate.getDate()} /${joiningDate.getMonth() + 1}/${joiningDate.getFullYear()}`}/>
+        </Col>
+        <Col span={12}>
+          <DescriptionItem title="BMI" content={(weight / (height * height)).toFixed(2)}/>
+        </Col>
+      </Row>
+      <Divider/>
+      <Row>
+        <Col span={12}>
+          <p className="site-description-item-profile-p">Chương trình tập luyện tham gia:</p>
+          <ol style={{paddingInlineStart: "20px"}}>
+            {userData.trainingPrograms && userData.trainingPrograms.map((training => (
+              <li style={{marginBottom: "5px"}}>
+                {training.title}
+              </li>
+            )))}
+          </ol>
+        </Col>
+        <Col span={12}>
+          <p className="site-description-item-profile-p">Chương trình dinh dưỡng tham gia:</p>
+          <ol style={{paddingInlineStart: "20px"}}>
+            {userData.mealPrograms && userData.mealPrograms.map((mealProgram => (
+              <li key={mealProgram._id} style={{marginBottom: "5px"}}>
+                {mealProgram.title}
+              </li>
+            )))}
+          </ol>
+        </Col>
+      </Row>
+      <Divider/>
+      <p className="site-description-item-profile-p">Lịch sử tập luyện</p>
+      <List
+        style={{marginLeft: "10px"}}
+        itemLayout="horizontal"
+        dataSource={userData.exerciseHistory}
+        renderItem={item => {
+          let time = new Date(item.time);
+          let trainingLength = item.duration;
+          return (
+            <List.Item key={item._id}>
+              <List.Item.Meta
+                avatar={<Avatar size={35} style={{
+                  color: '#f56a00',
+                  backgroundColor: '#fde3cf'
+                }}>{`${time.getDay()} / ${time.getMonth() + 1}`}</Avatar>}
+                title={<span>{item.title}</span>}
+                description={`${Utils.timeToString(trainingLength)}`}
+              />
+            </List.Item>)
+        }}/>
+    </>
     }
-  </Drawer >)
+  </Drawer>)
 }
 
-function TrainerDrawer({ getUsersData, onClose, visible, trainerData, deleteRegister, acceptRegister, deleteUserTrainer }) {
+function TrainerDrawer({
+                         getUsersData,
+                         onClose,
+                         visible,
+                         trainerData,
+                         deleteRegister,
+                         acceptRegister,
+                         deleteUserTrainer
+                       }) {
   let joiningDate
   if (trainerData != null) {
     joiningDate = new Date(trainerData.created);
@@ -288,144 +301,150 @@ function TrainerDrawer({ getUsersData, onClose, visible, trainerData, deleteRegi
     visible={visible}
   >
     {trainerData != null &&
-      <>
-        <Row gutter={[20, 20]} >
-          <Col span={12}>
-            <p><Avatar size={70} src={trainerData.avatar} style={{ marginRight: "10px" }} /> {trainerData.name}</p>
-          </Col>
-          <Col span={12} style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <RoleManagement getUsersData={getUsersData} userData={trainerData} />
-          </Col>
-        </Row>
-        <Divider />
-        <p className="site-description-item-profile-p">Thông tin cá nhân</p>
-        <Row gutter={[20, 20]} >
-          <Col span={12}>
-            <DescriptionItem title="Họ tên" content={trainerData.name} />
-          </Col>
-          <Col span={12}>
-            <DescriptionItem title="Ngày tham gia" content={`${joiningDate.getDate()} /${joiningDate.getMonth() + 1}/${joiningDate.getFullYear()}`} />
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}>
-            <DescriptionItem title="Email" content={`${trainerData.email}`} />
-          </Col>
-        </Row>
-        <Divider />
-        <Row gutter={[20, 30]} >
-          <Col span={12}>
-            <p className="site-description-item-profile-p">Chương trình tập luyện của {trainerData.name}:</p>
-            <List
-              style={{ marginRight: "20px" }}
-              itemLayout="horizontal"
-              dataSource={trainerData.trainingPrograms}
-              renderItem={item => {
-                return (
-                  <List.Item key={item._id} >
-                    <List.Item.Meta
-                      avatar={<Avatar size={35} src={item.imageUrl}></Avatar>}
-                      title={<span>{item.title}</span>}
-                    />
-                  </List.Item>)
-              }} />
-          </Col>
-          <Col span={12}>
-            <p className="site-description-item-profile-p">Chương trình dinh dưỡng của {trainerData.name}:</p>
-            <List
-              style={{ marginRight: "20px" }}
-              itemLayout="horizontal"
-              dataSource={trainerData.mealPrograms}
-              renderItem={item => {
-                return (
-                  <List.Item key={item._id} >
-                    <List.Item.Meta
-                      avatar={<Avatar size={35} src={item.imageUrl}></Avatar>}
-                      title={<span>{item.title}</span>}
-                    />
-                  </List.Item>)
-              }} />
-          </Col>
-        </Row>
-        <Divider />
-        <Row gutter={[20, 30]} >
-          <Col span={12}>
-            <p className="site-description-item-profile-p">Học viên:</p>
-            <List
-              style={{ marginRight: "20px" }}
-              itemLayout="horizontal"
-              dataSource={trainerData.trainees}
-              renderItem={item => {
-                return (
-                  <List.Item
-                    key={item._id}
-                    extra={<Popup
-                      title="Xóa học viên"
+    <>
+      <Row gutter={[20, 20]}>
+        <Col span={12}>
+
+          <p><UserAvatar
+            size={70}
+            imageUrl={trainerData.avatar}
+            style={{marginRight: "10px"}}
+            name={trainerData.name}/> {trainerData.name}</p>
+        </Col>
+        <Col span={12} style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+          <RoleManagement getUsersData={getUsersData} userData={trainerData}/>
+        </Col>
+      </Row>
+      <Divider/>
+      <p className="site-description-item-profile-p">Thông tin cá nhân</p>
+      <Row gutter={[20, 20]}>
+        <Col span={12}>
+          <DescriptionItem title="Họ tên" content={trainerData.name}/>
+        </Col>
+        <Col span={12}>
+          <DescriptionItem title="Ngày tham gia"
+                           content={`${joiningDate.getDate()} /${joiningDate.getMonth() + 1}/${joiningDate.getFullYear()}`}/>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          <DescriptionItem title="Email" content={`${trainerData.email}`}/>
+        </Col>
+      </Row>
+      <Divider/>
+      <Row gutter={[20, 30]}>
+        <Col span={12}>
+          <p className="site-description-item-profile-p">Chương trình tập luyện của {trainerData.name}:</p>
+          <List
+            style={{marginRight: "20px"}}
+            itemLayout="horizontal"
+            dataSource={trainerData.trainingPrograms}
+            renderItem={item => {
+              return (
+                <List.Item key={item._id}>
+                  <List.Item.Meta
+                    avatar={<Avatar size={35} src={item.imageUrl}></Avatar>}
+                    title={<span>{item.title}</span>}
+                  />
+                </List.Item>)
+            }}/>
+        </Col>
+        <Col span={12}>
+          <p className="site-description-item-profile-p">Chương trình dinh dưỡng của {trainerData.name}:</p>
+          <List
+            style={{marginRight: "20px"}}
+            itemLayout="horizontal"
+            dataSource={trainerData.mealPrograms}
+            renderItem={item => {
+              return (
+                <List.Item key={item._id}>
+                  <List.Item.Meta
+                    avatar={<Avatar size={35} src={item.imageUrl}></Avatar>}
+                    title={<span>{item.title}</span>}
+                  />
+                </List.Item>)
+            }}/>
+        </Col>
+      </Row>
+      <Divider/>
+      <Row gutter={[20, 30]}>
+        <Col span={12}>
+          <p className="site-description-item-profile-p">Học viên:</p>
+          <List
+            style={{marginRight: "20px"}}
+            itemLayout="horizontal"
+            dataSource={trainerData.trainees}
+            renderItem={item => {
+              return (
+                <List.Item
+                  key={item._id}
+                  extra={<Popup
+                    title="Xóa học viên"
+                    btnStyle={{
+                      type: "primary", danger: true, icon: < MinusOutlined/>, shape: "circle"
+                    }}
+                    onOk={() => deleteUserTrainer(trainerData._id, item._id)}
+                  >
+                    <div>{`Bạn chắc chắn muốn xóa  ${item.name} trong danh sách học viên của huấn luyện viên ${trainerData.name}`}</div>
+                  </Popup>}>
+                  <List.Item.Meta
+                    avatar={<Avatar size={35} src={item.avatar}></Avatar>}
+                    title={<span>{item.name}</span>}
+                  />
+                </List.Item>)
+            }}/>
+        </Col>
+        <Col span={12}>
+          <p className="site-description-item-profile-p">Học viên đăng ký:</p>
+          <List
+            style={{marginRight: "20px"}}
+            itemLayout="horizontal"
+            dataSource={trainerData.userRegisters}
+            renderItem={item => {
+              let trainerId = trainerData._id;
+              let userId = item._id;
+              return (
+                <List.Item
+                  key={item._id}
+                  extra={<Row>
+                    <Popup
+                      title={`Chấp nhận đăng ký`}
                       btnStyle={{
-                        type: "primary", danger: true, icon: < MinusOutlined />, shape: "circle"
+                        style: {
+                          marginRight: "8px"
+                        },
+                        type: "primary", icon: < CheckOutlined/>, shape: "circle"
                       }}
-                      onOk={() => deleteUserTrainer(trainerData._id, item._id)}
+                      onOk={() => acceptRegister(trainerId, userId)}
                     >
-                      <div>{`Bạn chắc chắn muốn xóa  ${item.name} trong danh sách học viên của huấn luyện viên ${trainerData.name}`}</div>
-                    </Popup>} >
-                    <List.Item.Meta
-                      avatar={<Avatar size={35} src={item.avatar}></Avatar>}
-                      title={<span>{item.name}</span>}
-                    />
-                  </List.Item>)
-              }} />
-          </Col>
-          <Col span={12}>
-            <p className="site-description-item-profile-p">Học viên đăng ký:</p>
-            <List
-              style={{ marginRight: "20px" }}
-              itemLayout="horizontal"
-              dataSource={trainerData.userRegisters}
-              renderItem={item => {
-                let trainerId = trainerData._id;
-                let userId = item._id;
-                return (
-                  <List.Item
-                    key={item._id}
-                    extra={<Row>
-                      <Popup
-                        title={`Chấp nhận đăng ký`}
-                        btnStyle={{
-                          style: {
-                            marginRight: "8px"
-                          },
-                          type: "primary", icon: < CheckOutlined />, shape: "circle"
-                        }}
-                        onOk={() => acceptRegister(trainerId, userId)}
-                      >
-                        <div>{`Bạn chắc chắn muốn thêm học viên ${item.name} vào huấn luyện viên ${trainerData.name}`}</div>
-                      </Popup>
-                      <Popup
-                        title={`Xoá đăng ký`}
-                        btnStyle={{
-                          type: "primary", danger: true, icon: < MinusOutlined />, shape: "circle"
-                        }}
-                        onOk={() => deleteRegister(trainerId, userId)}
-                      >
-                        <div>{`Bạn chắc chắn muốn xóa đăng ký học viên ${item.name} vào huấn luyện viên ${trainerData.name}`}</div>
-                      </Popup>
-                    </Row>} >
-                    <List.Item.Meta
-                      avatar={<Avatar size={35} src={item.avatar}></Avatar>}
-                      title={<span>{item.name}</span>}
+                      <div>{`Bạn chắc chắn muốn thêm học viên ${item.name} vào huấn luyện viên ${trainerData.name}`}</div>
+                    </Popup>
+                    <Popup
+                      title={`Xoá đăng ký`}
+                      btnStyle={{
+                        type: "primary", danger: true, icon: < MinusOutlined/>, shape: "circle"
+                      }}
+                      onOk={() => deleteRegister(trainerId, userId)}
+                    >
+                      <div>{`Bạn chắc chắn muốn xóa đăng ký học viên ${item.name} vào huấn luyện viên ${trainerData.name}`}</div>
+                    </Popup>
+                  </Row>}>
+                  <List.Item.Meta
+                    avatar={<UserAvatar size={30} imageUrl={item.avatar} name={item.name}></UserAvatar>}
+                    title={<span>{item.name}</span>}
 
-                    />
-                  </List.Item>)
-              }} />
-          </Col>
-        </Row>
+                  />
+                </List.Item>)
+            }}/>
+        </Col>
+      </Row>
 
-      </>
+    </>
     }
-  </Drawer >)
+  </Drawer>)
 }
 
-const DescriptionItem = ({ title, content }) => (
+const DescriptionItem = ({title, content}) => (
   <div className="site-description-item-profile-wrapper">
     <p className="site-description-item-profile-p-label">{title}:</p>
     {content}
