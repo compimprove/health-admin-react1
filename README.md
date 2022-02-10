@@ -2,11 +2,11 @@
 
 ### Test Account:
 
-* **Huấn luyện viên 1**
+* **Huấn luyện viên 1**:
 email: "duynguyen@gmail.com",
 password: "duynguyen",
 
-* **Huấn luyện viên 2**
+* **Huấn luyện viên 2**:
 email: "annguyen@gmail.com",
 password: "annguyen",
 
